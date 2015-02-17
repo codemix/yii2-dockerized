@@ -1,0 +1,9 @@
+config/local.php
+config/console-local.php
+runtime/*
+web/assets/*
+fig.yml
+.env
+
+*.swp
+.vimrc

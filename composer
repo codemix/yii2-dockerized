@@ -1,0 +1,4 @@
+#!/bin/bash
+
+composer config -g github-oauth.github.com $API_TOKEN
+exec composer "$@"

@@ -1,0 +1,24 @@
+web:
+    build: ./
+    ports:
+        - "8080:80"
+    expose:
+        - "80"
+    volumes:
+        - ./:/var/www/html/
+    links:
+        - db
+    environment:
+        YII_DEBUG: 1
+        API_TOKEN: "<YOUR GITHUB API TOKEN>"
+db:
+    image: mysql:5.6
+    ports:
+        - "3306:3306"
+    expose:
+        - "3306"
+    environment:
+        MYSQL_ROOT_PASSWORD: secret-root
+        MYSQL_DATABASE: web
+        MYSQL_USER: web
+        MYSQL_PASSWORD: secret
