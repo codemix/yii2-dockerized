@@ -16,7 +16,7 @@ Creating a new project
 To use this template, you first need to have [docker](http://www.docker.com) installed.
 Then you can start a new project with:
 
-    composer create-project --prefer-dist codemix/yii2-dockerized .
+    composer create-project --no-install codemix/yii2-dockerized myproject
 
 You should then update things for the requirements of your project:
 
