@@ -82,12 +82,12 @@ Docker is very versatile so you can come up with different workflows.
  * Slower deployment due to extra build step
 
 This is a very simple workflow: In each environment the runtime image is built
-from the Dockerfile. Developers need to be informed whenever the Dockerfile changes
+from the `Dockerfile`. Developers need to be informed whenever the `Dockerfile` changes
 so that they rebuild their local image.
 
 No images are shared, so the build step could take quite some time, depending on
 [how much](https://docs.docker.com/articles/dockerfile_best-practices/#build-cache)
-the Dockerfile has changed.
+the `Dockerfile` has changed since the last build in this environment.
 
 
 ### 4.2 Docker image based
@@ -96,14 +96,14 @@ the Dockerfile has changed.
  * Quick and simple deployment
 
 Here we can take two approaches: With or without a base image. In both cases
-the Dockerfile should be organized in a way, that the "static", less changing parts
-should be on top of the Dockerfile and the "variable" or frequently changing
+the `Dockerfile` should be organized in a way, that the "static", less changing parts
+should be on top of the `Dockerfile` and the "variable" or frequently changing
 parts (e.g. `COPY . /var/www/html`) are on the bottom of the file.
 
 
 #### 4.2.1 Without a base image
 
-We use a single Dockerfile and each time we want to make a deployment, we create
+We use a single `Dockerfile` and each time we want to make a deployment, we create
 a new tagged image and push it to the registry. This image can then be pulled to
 production.
 
@@ -123,14 +123,14 @@ Here we use two Dockerfiles:
  * One for the base image, e.g. `Dockerfile.base` and
  * one for the final image, which extends from the base image
 
-So we'd first move the current Dockerfile and create a base image:
+So we'd first move the current `Dockerfile` and create a base image:
 
     mv Dockerfile Dockerfile.base
     docker build -f Dockerfile.base -t myregistry.com:5000/myapp:base-1.0.0
     docker push myregistry.com:5000/myapp:base-1.0.0
 
 Now we have a base image as version `base-1.0.0`. For ongoing development we take
-it from there and use a minimal second Dockerfile that is based on this image:
+it from there and use a minimal second `Dockerfile` that is based on this image:
 
 ```
 FROM myregistry.com:5000/myapp:base-1.0.0
@@ -143,7 +143,7 @@ RUN mkdir runtime web/assets \
     && chown www-data:www-data runtime web/assets
 ```
 
-So other developers will now use this simplified Dockerfile for their daily work.
+So other developers will now use this simplified `Dockerfile` for their daily work.
 They don't have to rebuild all the layers from the base image and will only stack
 their local changes on top.
 
@@ -160,7 +160,7 @@ volume, we can create another base image:
     docker build -f Dockerfile.base -t myregistry.com:5000/myapp:base-1.1.0
     docker push myregistry.com:5000/myapp:base-1.1.0
 
-And modify the `FROM` line in the Dockerfile to use this image as basis:
+And modify the `FROM` line in the `Dockerfile` to use this image as basis:
 
     FROM myregistry.com:5000/myapp:base-1.1.0
 
