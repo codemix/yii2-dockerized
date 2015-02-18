@@ -10,8 +10,8 @@ A template for docker based Yii 2 applications.
  * Support docker image based development workflow
 
 
-Creating a new project
-----------------------
+1. Creating a new project
+-------------------------
 
 To use this template, you first need to have [docker](http://www.docker.com) installed.
 Then you can start a new project with:
@@ -31,8 +31,8 @@ and uncompress the files into a directory. You should then update things for the
 When you're done, you should commit your initial project to your git repository.
 
 
-Setting up the development environment
---------------------------------------
+2. Setting up the development environment
+-----------------------------------------
 
 For local environments we recommend to use [fig](http://www.fig.sh/). Then
 bringing a new developer into the project is a matter of a few simple steps:
@@ -51,8 +51,8 @@ variables for linked containers like `DB_PORT_3306_TCP_ADDR`. So if you use
 the above `fig.yml`, you don't have to set any DB related variables at all.
 
 
-Configuration files
--------------------
+3. Configuration files
+----------------------
 
 All configuration lives in 3 files in the `config/` directory.
 
@@ -70,13 +70,13 @@ files. You therefore first need to set the `IGNORE_LOCAL_CONFIG` variable to `0`
 Both files are ignored by git.
 
 
-Workflows
----------
+4. Workflows
+------------
 
 Docker is very versatile so you can come up with different workflows.
 
 
-### Dockerfiles only
+### 4.1 Dockerfile based
 
  * No docker registry required
  * Slower deployment due to extra build step
@@ -90,7 +90,7 @@ No images are shared, so the build step could take quite some time, depending on
 the Dockerfile has changed.
 
 
-### Docker images
+### 4.2 Docker image based
 
  * Requires a docker registry (either self-hosted or from 3rd party)
  * Quick and simple deployment
@@ -101,7 +101,7 @@ should be on top of the Dockerfile and the "variable" or frequently changing
 parts (e.g. `COPY . /var/www/html`) are on the bottom of the file.
 
 
-#### Without a base image
+#### 4.2.1 Without a base image
 
 We use a single Dockerfile and each time we want to make a deployment, we create
 a new tagged image and push it to the registry. This image can then be pulled to
@@ -116,7 +116,7 @@ their machine, as otherwhise docker couldn't reuse cached layers the next time
 it builds a new image.
 
 
-#### Using a base image
+#### 4.2.2 Using a base image
 
 Here we use two Dockerfiles:
 
@@ -166,16 +166,16 @@ And modify the `FROM` line in the Dockerfile to use this image as basis:
 
 
 
-FAQ
----
+5. FAQ
+------
 
-### How can i run yii console commands?
+### 5.1 How can i run yii console commands?
 
     fig run --rm web yii migrate
     fig run --rm web yii mycommand/myaction
 
 
-### Where are composer packages installed?
+### 5.2 Where are composer packages installed?
 
 Composer packages are installed inside the container but outside of the shared
 directory. During development we usually mount the local app directory into the
@@ -187,7 +187,7 @@ By keeping the directory outside, we circumvent this issue. Docker images will
 always contain all required composer dependencies and use those at runtime.
 
 
-### How can I update or install new composer packages?
+### 5.3 How can I update or install new composer packages?
 
 To update or install new packages you first need an updated `composer.lock` file.
 Then the next time you issue `fig build` (or manually do `docker build ...`) it will
@@ -208,7 +208,7 @@ Now you should have an updated `composer.lock` file and can rebuild your contain
     fig build
 
 
-### I have a permission issue with runtime / web/assets directory. How to fix it?
+### 5.4 I have a permission issue with runtime / web/assets directory. How to fix it?
 
 This is caused by a missing feature in docker: You can not set the permissions of
 shared volumes. As a workaround make the directories world writeable:
@@ -216,7 +216,7 @@ shared volumes. As a workaround make the directories world writeable:
     chmod a+rwx runtime/ web/assets/
 
 
-### How can I log to a file?
+### 5.5 How can I log to a file?
 
 The default log configuration follows the Docker convention to log to `STDOUT`
 and `STDERR`. You should better not change this for production. But you can
