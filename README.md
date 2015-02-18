@@ -13,7 +13,7 @@ A template for docker based Yii 2 applications.
 1. Creating a new project
 -------------------------
 
-To use this template, you first need to have [docker](http://www.docker.com) installed.
+To use this template, you first need to have [docker](http://www.docker.com) (>=1.5.0) installed.
 Then you can start a new project with:
 
 ```sh
