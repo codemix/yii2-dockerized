@@ -18,7 +18,8 @@ Then you can start a new project with:
 
     composer create-project --no-install codemix/yii2-dockerized myproject
 
-You should then update things for the requirements of your project:
+or, if you don't have composer installed, [download](https://github.com/codemix/yii2-dockerized/releases)
+and uncompress the files into a directory. You should then update things for the requirements of your project:
 
  * Modify the default configuration in `config/` and `.env-example`
  * Modify the dependencies in `composer.json`
@@ -72,17 +73,98 @@ Both files are ignored by git.
 Workflows
 ---------
 
-### Docker images
+Docker is very versatile so you can come up with different workflows.
 
- * Requires docker registry (either self-hosted or for $$$)
- * Smaller image footprints
- * TBC
 
 ### Dockerfiles only
 
- * No registry required
- * Building images takes longer - influences deployment!
- * TBC
+ * No docker registry required
+ * Slower deployment due to extra build step
+
+This is a very simple workflow: In each environment the runtime image is built
+from the Dockerfile. Developers need to be informed whenever the Dockerfile changes
+so that they rebuild their local image.
+
+No images are shared, so the build step could take quite some time, depending on
+[how much](https://docs.docker.com/articles/dockerfile_best-practices/#build-cache)
+the Dockerfile has changed.
+
+
+### Docker images
+
+ * Requires a docker registry (either self-hosted or from 3rd party)
+ * Quick and simple deployment
+
+Here we can take two approaches: With or without a base image. In both cases
+the Dockerfile should be organized in a way, that the "static", less changing parts
+should be on top of the Dockerfile and the "variable" or frequently changing
+parts (e.g. `COPY . /var/www/html`) are on the bottom of the file.
+
+
+#### Without a base image
+
+We use a single Dockerfile and each time we want to make a deployment, we create
+a new tagged image and push it to the registry. This image can then be pulled to
+production.
+
+One drawback here is, that each deployment image contains a full copy of your
+source code, even if you only changed a couple of lines since the last deployed
+image.
+
+It's also important that the developers alway pull the last deployed image to
+their machine, as otherwhise docker couldn't reuse cached layers the next time
+it builds a new image.
+
+
+#### Using a base image
+
+Here we use two Dockerfiles:
+
+ * One for the base image, e.g. `Dockerfile.base` and
+ * one for the final image, which extends from the base image
+
+So we'd first move the current Dockerfile and create a base image:
+
+    mv Dockerfile Dockerfile.base
+    docker build -f Dockerfile.base -t myregistry.com:5000/myapp:base-1.0.0
+    docker push myregistry.com:5000/myapp:base-1.0.0
+
+Now we have a base image as version `base-1.0.0`. For ongoing development we take
+it from there and use a minimal second Dockerfile that is based on this image:
+
+```
+FROM myregistry.com:5000/myapp:base-1.0.0
+COPY composer.json /var/www/html/
+COPY composer.lock /var/www/html/
+RUN composer self-update && \
+    composer install --no-progress
+COPY . /var/www/html
+RUN mkdir runtime web/assets \
+    && chown www-data:www-data runtime web/assets
+```
+
+So other developers will now use this simplified Dockerfile for their daily work.
+They don't have to rebuild all the layers from the base image and will only stack
+their local changes on top.
+
+We'll also use this file for the final deployment images:
+
+    docker build -t myregistry.com:5000/myapp:1.0.0
+    docker build -t myregistry.com:5000/myapp:1.0.1
+    docker build -t myregistry.com:5000/myapp:1.0.2
+    ...
+
+After some time, when the modifications to the `base-1.0.0` image exceed a certain
+volume, we can create another base image:
+
+    docker build -f Dockerfile.base -t myregistry.com:5000/myapp:base-1.1.0
+    docker push myregistry.com:5000/myapp:base-1.1.0
+
+And modify the `FROM` line in the Dockerfile to use this image as basis:
+
+    FROM myregistry.com:5000/myapp:base-1.1.0
+
+
 
 FAQ
 ---
