@@ -16,7 +16,9 @@ A template for docker based Yii 2 applications.
 To use this template, you first need to have [docker](http://www.docker.com) installed.
 Then you can start a new project with:
 
-    composer create-project --no-install codemix/yii2-dockerized myproject
+```sh
+composer create-project --no-install codemix/yii2-dockerized myproject
+```
 
 or, if you don't have composer installed, [download](https://github.com/codemix/yii2-dockerized/releases)
 and uncompress the files into a directory. You should then update things for the requirements of your project:
@@ -125,14 +127,16 @@ Here we use two Dockerfiles:
 
 So we'd first move the current `Dockerfile` and create a base image:
 
-    mv Dockerfile Dockerfile.base
-    docker build -f Dockerfile.base -t myregistry.com:5000/myapp:base-1.0.0
-    docker push myregistry.com:5000/myapp:base-1.0.0
+```sh
+mv Dockerfile Dockerfile.base
+docker build -f Dockerfile.base -t myregistry.com:5000/myapp:base-1.0.0
+docker push myregistry.com:5000/myapp:base-1.0.0
+```
 
 Now we have a base image as version `base-1.0.0`. For ongoing development we take
 it from there and use a minimal second `Dockerfile` that is based on this image:
 
-```
+```dockerfile
 FROM myregistry.com:5000/myapp:base-1.0.0
 COPY composer.json /var/www/html/
 COPY composer.lock /var/www/html/
@@ -149,20 +153,26 @@ their local changes on top.
 
 We'll also use this file for the final deployment images:
 
-    docker build -t myregistry.com:5000/myapp:1.0.0
-    docker build -t myregistry.com:5000/myapp:1.0.1
-    docker build -t myregistry.com:5000/myapp:1.0.2
-    ...
+```sh
+docker build -t myregistry.com:5000/myapp:1.0.0
+docker build -t myregistry.com:5000/myapp:1.0.1
+docker build -t myregistry.com:5000/myapp:1.0.2
+...
+```
 
 After some time, when the modifications to the `base-1.0.0` image exceed a certain
 volume, we can create another base image:
 
-    docker build -f Dockerfile.base -t myregistry.com:5000/myapp:base-1.1.0
-    docker push myregistry.com:5000/myapp:base-1.1.0
+```sh
+docker build -f Dockerfile.base -t myregistry.com:5000/myapp:base-1.1.0
+docker push myregistry.com:5000/myapp:base-1.1.0
+```
 
 And modify the `FROM` line in the `Dockerfile` to use this image as basis:
 
-    FROM myregistry.com:5000/myapp:base-1.1.0
+```dockerfile
+FROM myregistry.com:5000/myapp:base-1.1.0
+```
 
 
 
@@ -171,8 +181,10 @@ And modify the `FROM` line in the `Dockerfile` to use this image as basis:
 
 ### 5.1 How can i run yii console commands?
 
-    fig run --rm web yii migrate
-    fig run --rm web yii mycommand/myaction
+```sh
+fig run --rm web yii migrate
+fig run --rm web yii mycommand/myaction
+```
 
 
 ### 5.2 Where are composer packages installed?
@@ -201,11 +213,15 @@ and expose it in your `fig.yml` file as `API_TOKEN` env var.
 Then use our custom `composer` wrapper script as follows (Note the important `./`
 before the composer command):
 
-    fig run --rm web ./composer update my/package
+```sh
+fig run --rm web ./composer update my/package
+```
 
 Now you should have an updated `composer.lock` file and can rebuild your container:
 
-    fig build
+```sh
+fig build
+```
 
 
 ### 5.4 I have a permission issue with runtime / web/assets directory. How to fix it?
@@ -213,7 +229,9 @@ Now you should have an updated `composer.lock` file and can rebuild your contain
 This is caused by a missing feature in docker: You can not set the permissions of
 shared volumes. As a workaround make the directories world writeable:
 
-    chmod a+rwx runtime/ web/assets/
+```sh
+chmod a+rwx runtime/ web/assets/
+```
 
 
 ### 5.5 How can I log to a file?
