@@ -69,7 +69,7 @@ The template so far uses the following configuration variables:
     to use for Yii logging. Default is `0`.
  * `COOKIE_VALIDATION_KEY` the unique [cookie validation key](http://www.yiiframework.com/doc-2.0/yii-web-request.html#$cookieValidationKey-detail) required by Yii. This variable is mandatory.
  * `DB_DSN` the [DSN](http://php.net/manual/en/pdo.construct.php) to use for DB connection.
-    If this is not set, it will also try to create one from docker's `DB_PORT_3306_TCP_ADDR`
+    If this is not set, it will try to create one from docker's `DB_PORT_3306_TCP_ADDR`
     and assume MySQL as DBMS and `web` as DB name. If this is not set either, an exception
     is thrown.
  * `DB_USER` the DB username. Defaults to `web` if not set.
@@ -93,7 +93,9 @@ files. You therefore first need to set the `ENABLE_LOCALCONF` variable to `1` in
  * `console-local.php` an optional file with local overrides to the console configuration
 
 Both have the same format as `web.php` and `console.php` and are merged into the respective
-configuration. The files are also ignored by git to not accidentally commit any local configs.
+configuration. So you only have to add those parts of the configuration that differ from
+the `web.php` and `console.php`. The files are ignored by git to not accidentally
+commit any local configs.
 
 
 4. Workflows
