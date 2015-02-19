@@ -11,7 +11,7 @@ require(__DIR__ . '/../vendor/yiisoft/yii2/Yii.php');
 
 // Build web configuration
 $web = require(__DIR__.'/config/web.php');
-if (!getenv('IGNORE_LOCAL_CONFIG') && file_exists(__DIR__.'/../config/local.php')) {
+if (getenv_default('ENABLE_LOCALCONF', false) && file_exists(__DIR__.'/../config/local.php')) {
     $local = require(__DIR__.'/config/local.php');
     $web = yii\helpers\ArrayHelper::merge($web, $local);
 }
