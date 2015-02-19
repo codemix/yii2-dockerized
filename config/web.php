@@ -9,9 +9,9 @@ $config = [
         ],
         'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => getenv_default('DB_DSN', 'mysql:host=localhost;dbname=web'),
+            'dsn' => DB_DSN,
             'username' => getenv_default('DB_USER', 'web'),
-            'password' => getenv_default('DB_PASSWORD', 'secret'),
+            'password' => getenv_default('DB_PASSWORD', 'web'),
             'charset' => 'utf8',
             'tablePrefix' => '',
         ],

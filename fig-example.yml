@@ -9,7 +9,7 @@ web:
     links:
         - db
     environment:
-        YII_DEBUG: 1
+        ENABLE_ENV_FILE: 1
         API_TOKEN: "<YOUR GITHUB API TOKEN>"
 db:
     image: mysql:5.6

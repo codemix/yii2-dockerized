@@ -18,7 +18,7 @@ if (!getenv('IGNORE_LOCAL_CONFIG') && file_exists(__DIR__.'/../config/local.php'
 
 // Build console configuration
 $config = require(__DIR__.'/config/console.php');
-if (!getenv('IGNORE_LOCAL_CONFIG') && file_exists(__DIR__.'/../config/console-local.php')) {
+if (getenv_default('ENABLE_LOCALCONF', false) && file_exists(__DIR__.'/../config/console-local.php')) {
     $local = require(__DIR__.'/config/console-local.php');
     $config = yii\helpers\ArrayHelper::merge($config, $local);
 }

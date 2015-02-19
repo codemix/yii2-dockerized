@@ -21,14 +21,16 @@ composer create-project --no-install codemix/yii2-dockerized myproject
 ```
 
 or, if you don't have composer installed, [download](https://github.com/codemix/yii2-dockerized/releases)
-and uncompress the files into a directory. You should then update things for the requirements of your project:
+and uncompress the files into a directory. You may then want modify some things to match
+your project requirements:
 
- * Modify the default configuration in `config/` and `.env-example`
- * Modify the dependencies in `composer.json`
- * Modify the default machine setup in `.fig-example`
- * Modify `Dockerfile` e.g. to enable more PHP extensions
- * Modify the example models and initial DB migration
- * Modify the README (this file ;) )
+ * the `Dockerfile` e.g. to enable more PHP extensions.
+ * the default machine setup in `.fig-example`
+ * the default configuration in `config/`
+ * the dependencies in `composer.json` (requires update of `composer.lock`, see FAQ below)
+ * the example models and initial DB migration
+ * the available environment variables
+ * the README (this file ;) )
 
 When you're done, you should commit your initial project to your git repository.
 
@@ -41,16 +43,37 @@ bringing a new developer into the project is a matter of a few simple steps:
 
  * Clone the app sources from your repository
  * Create a local `fig.yml` configuration file (see `fig-example.yml`)
- * Create a local `.env` file (see `.env-example`)
+ * Add `ENABLE_ENV_FILE=1` to the `environment` section of your `fig.yml`
+ * Copy the `.env-example` file to `.env`
  * Run DB migrations (see below)
 
-Now the app can be started with `fig up`. Environment variables can either be
-set in the `fig.yml` or - since we use [phpdotenv](https://github.com/vlucas/phpdotenv) -
-in a local `.env` file (see the example in `.env-example`).
+Now the app can be started with `fig up` and should be available under
+[http://localhost:8080](http://localhost:8080) (or the IP address of your VM if you use boot2docker).
 
-The included example configuration makes use of docker's default environment
-variables for linked containers like `DB_PORT_3306_TCP_ADDR`. So if you use
-the above `fig.yml`, you don't have to set any DB related variables at all.
+As this template follows the [12 factor](http://12factor.net/) principles, all runtime
+configuration should happen via environment variables. So in production, you will use
+env vars e.g. to pass DB credentials to your container.
+
+For local development you could configure those vars in the `environment` section of your
+`fig.yml`. But this requires to rebuild the container whenever you change any var. That's
+why we prefer `.env` files (using [phpdotenv](https://github.com/vlucas/phpdotenv)) for local
+development. The app will pick up any changes there immediately.
+
+The template so far uses the following configuration variables:
+
+ * `ENABLE_ENV_FILE` whether to load env vars from a local `.env` file. Default is `0`.
+ * `ENABLE_LOCALCONF` whether to allow local overrides for web and console configuration (see below). Default is `0`.
+ * `YII_DEBUG` whether to enable debug mode for Yii. Default is `0`.
+ * `YII_ENV` the Yii app environment. Either `prod` (default) or `dev`
+ * `YII_TRACELEVEL` the [traceLevel](http://www.yiiframework.com/doc-2.0/yii-log-dispatcher.html#$traceLevel-detail)
+    to use for Yii logging. Default is `0`.
+ * `COOKIE_VALIDATION_KEY` the unique [cookie validation key](http://www.yiiframework.com/doc-2.0/yii-web-request.html#$cookieValidationKey-detail) required by Yii. This variable is mandatory.
+ * `DB_DSN` the [DSN](http://php.net/manual/en/pdo.construct.php) to use for DB connection.
+    If this is not set, it will also try to create one from docker's `DB_PORT_3306_TCP_ADDR`
+    and assume MySQL as DBMS and `web` as DB name. If this is not set either, an exception
+    is thrown.
+ * `DB_USER` the DB username. Defaults to `web` if not set.
+ * `DB_PASSWORD` the DB password. Defaults to `web` if not set.
 
 
 3. Configuration files
@@ -63,13 +86,14 @@ All configuration lives in 3 files in the `config/` directory.
  * `params.php` application parameters for both web and console application
 
 For maximum flexibility you can also use local overrides for web and console configuration
-files. You therefore first need to set the `IGNORE_LOCAL_CONFIG` variable to `0` in your
+files. You therefore first need to set the `ENABLE_LOCALCONF` variable to `1` in your
 `fig.yml` or `.env` file. Then the app will check if any of the following files exists:
 
  * `local.php` optional local overrides to the web config
  * `console-local.php` an optional file with local overrides to the console configuration
 
-Both files are ignored by git.
+Both have the same format as `web.php` and `console.php` and are merged into the respective
+configuration. The files are also ignored by git to not accidentally commit any local configs.
 
 
 4. Workflows
