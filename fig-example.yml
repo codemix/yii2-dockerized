@@ -10,6 +10,7 @@ web:
         - db
     environment:
         ENABLE_ENV_FILE: 1
+        ENABLE_LOCALCONF: 1
         API_TOKEN: "<YOUR GITHUB API TOKEN>"
 db:
     image: mysql:5.6

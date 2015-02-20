@@ -27,7 +27,10 @@ RUN apt-get update \
     && a2enmod rewrite \
 
     # Update apache2.conf
-    && sed -i 's#DocumentRoot /var/www/html#DocumentRoot /var/www/html/web#' /etc/apache2/apache2.conf
+    && sed -i 's#DocumentRoot /var/www/html#DocumentRoot /var/www/html/web#' /etc/apache2/apache2.conf \
+
+    # Fix write permissions with shared folders
+    && usermod -u 1000 www-data
 
 # We first install any composer packages outside of the web root to prevent them
 # from being overwritten by the COPY below. If the composer.lock file here didn't
