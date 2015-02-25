@@ -6,6 +6,7 @@ use yii\base\NotSupportedException;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use app\models\behaviors\TimestampBehavior;
+use app\models\queries\UserQuery;
 
 /**
  * User model
@@ -20,8 +21,8 @@ use app\models\behaviors\TimestampBehavior;
  * @property string $auth_key
  * @property integer $role
  * @property integer $status
- * @property integer $created_at
- * @property integer $updated_at
+ * @property string $created_at
+ * @property string $updated_at
  * @property string $password write-only password
  */
 class User extends ActiveRecord implements IdentityInterface
@@ -35,6 +36,14 @@ class User extends ActiveRecord implements IdentityInterface
      * @var string|null the current password value from form input
      */
     protected $_password;
+
+    /**
+     * @return UserQuery custom query class with user scopes
+     */
+    public static function find()
+    {
+        return new UserQuery(get_called_class());
+    }
 
     /**
      * @inheritdoc
@@ -111,45 +120,12 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Finds user by username
-     *
-     * @param  string      $username
-     * @return static|null
-     */
-    public static function findByUsername($username)
-    {
-        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
-    }
-
-    /**
-     * Finds user by password reset token
-     *
-     * @param  string      $token password reset token
-     * @return static|null
-     */
-    public static function findByPasswordResetToken($token)
-    {
-        $expire = 3600;
-        $parts = explode('_', $token);
-        $timestamp = (int) end($parts);
-        if ($timestamp + $expire < time()) {
-            // token expired
-            return null;
-        }
-
-        return static::findOne([
-            'password_reset_token' => $token,
-            'status' => self::STATUS_ACTIVE,
-        ]);
-    }
-
-    /**
      * @param string $token the email confirmation token
      * @return User|null the user with email confirmed or null on failure
      */
     public static function confirmEmailByToken($token)
     {
-        $expire = 43200;
+        $expire = \Yii::$app->params['user.emailConfirmationTokenExpire'];
         $parts = explode('_', $token);
         $timestamp = (int) end($parts);
         if ($timestamp + $expire < time()) {
@@ -166,7 +142,6 @@ class User extends ActiveRecord implements IdentityInterface
             }
         }
     }
-
 
     /**
      * @inheritdoc

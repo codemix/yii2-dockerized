@@ -36,10 +36,7 @@ class PasswordResetRequestForm extends Model
     public function sendEmail()
     {
         /** @var User $user */
-        $user = User::find([
-            'status' => User::STATUS_ACTIVE,
-            'email' => $this->email,
-        ]);
+        $user = User::find()->canLogin()->email($this->email)->one();
 
         if ($user) {
             $user->generatePasswordResetToken();
