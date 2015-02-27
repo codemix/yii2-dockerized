@@ -25,7 +25,7 @@ and uncompress the files into a directory. You may then want modify some things 
 your project requirements:
 
  * the `Dockerfile` e.g. to enable more PHP extensions.
- * the default machine setup in `.fig-example`
+ * the default machine setup in `.docker-composer-example`
  * the default configuration in `config/`
  * the dependencies in `composer.json` (requires update of `composer.lock`, see FAQ below)
  * the example models and initial DB migration
@@ -38,16 +38,16 @@ When you're done, you should commit your initial project to your git repository.
 2. Setting up the development environment
 -----------------------------------------
 
-For local environments we recommend to use [fig](http://www.fig.sh/). Then
-bringing a new developer into the project is a matter of a few simple steps:
+For local environments we recommend to use [docker-compose](http://docs.docker.com/compose/install/).
+Then bringing a new developer into the project is a matter of a few simple steps:
 
  * Clone the app sources from your repository
- * Create a local `fig.yml` configuration file (see `fig-example.yml`)
- * Add `ENABLE_ENV_FILE=1` to the `environment` section of your `fig.yml`
+ * Create a local `docker-compose.yml` configuration file (see `docker-compose-example.yml`)
+ * Add `ENABLE_ENV_FILE=1` to the `environment` section of your `docker-compose.yml`
  * Copy the `.env-example` file to `.env`
  * Run DB migrations (see below)
 
-Now the app can be started with `fig up` and should be available under
+Now the app can be started with `docker-compose up` and should be available under
 [http://localhost:8080](http://localhost:8080) (or the IP address of your VM if you use boot2docker).
 
 As this template follows the [12 factor](http://12factor.net/) principles, all runtime
@@ -55,7 +55,7 @@ configuration should happen via environment variables. So in production, you wil
 env vars e.g. to pass DB credentials to your container.
 
 For local development you could configure those vars in the `environment` section of your
-`fig.yml`. But this requires to rebuild the container whenever you change any var. That's
+`docker-compose.yml`. But this requires to rebuild the container whenever you change any var. That's
 why we prefer `.env` files (using [phpdotenv](https://github.com/vlucas/phpdotenv)) for local
 development. The app will pick up any changes there immediately.
 
@@ -74,6 +74,9 @@ The template so far uses the following configuration variables:
     is thrown.
  * `DB_USER` the DB username. Defaults to `web` if not set.
  * `DB_PASSWORD` the DB password. Defaults to `web` if not set.
+ * `SMTP_HOST` the SMTP hostname.
+ * `SMTP_USER` the username for the SMTP server.
+ * `SMTP_PASSWORD` the password for the SMTP server.
 
 
 3. Configuration files
@@ -87,7 +90,7 @@ All configuration lives in 3 files in the `config/` directory.
 
 For maximum flexibility you can also use local overrides for web and console configuration
 files. You therefore first need to set the `ENABLE_LOCALCONF` variable to `1` in your
-`fig.yml` or `.env` file. Then the app will check if any of the following files exists:
+`docker-compose.yml` or `.env` file. Then the app will check if any of the following files exists:
 
  * `local.php` optional local overrides to the web config
  * `console-local.php` an optional file with local overrides to the console configuration
@@ -208,8 +211,8 @@ FROM myregistry.com:5000/myapp:base-1.1.0
 ### 5.1 How can i run yii console commands?
 
 ```sh
-fig run --rm web yii migrate
-fig run --rm web yii mycommand/myaction
+docker-compose run --rm web yii migrate
+docker-compose run --rm web yii mycommand/myaction
 ```
 
 
@@ -228,25 +231,25 @@ always contain all required composer dependencies and use those at runtime.
 ### 5.3 How can I update or install new composer packages?
 
 To update or install new packages you first need an updated `composer.lock` file.
-Then the next time you issue `fig build` (or manually do `docker build ...`) it will
+Then the next time you issue `docker-compose build` (or manually do `docker build ...`) it will
 pick up the changed file and create a new docker image with the updated packages.
 
 Due to the nasty API rate limitation on github, you can't just run `composer` inside
 our `web` container. You first have to create a
 [personal API token](https://github.com/blog/1509-personal-api-tokens) at github
-and expose it in your `fig.yml` file as `API_TOKEN` env var.
+and expose it in your `docker-compose.yml` file as `API_TOKEN` env var.
 
 Then use our custom `composer` wrapper script as follows (Note the important `./`
 before the composer command):
 
 ```sh
-fig run --rm web ./composer update my/package
+docker-compose run --rm web ./composer update my/package
 ```
 
 Now you should have an updated `composer.lock` file and can rebuild your container:
 
 ```sh
-fig build
+docker-compose build
 ```
 
 
