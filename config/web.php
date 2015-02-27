@@ -20,6 +20,12 @@ $config = [
         ],
         'mail' => [
             'class' => 'yii\swiftmailer\Mailer',
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => getenv('SMTP_HOST'),
+                'username' => getenv('SMTP_USER'),
+                'password' => getenv('SMTP_PASSWORD'),
+            ],
         ],
         'log' => [
             'traceLevel' => getenv_default('YII_TRACELEVEL', 0),

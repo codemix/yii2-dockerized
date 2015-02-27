@@ -48,4 +48,20 @@ class UserQuery extends ActiveQuery
         }
         return $this->andWhere(['password_reset_token' => $token]);
     }
+
+    /**
+     * @param string $token the email confirmation token
+     * @return UserQuery the query with conditions for valid email confirmation token applied
+     */
+    public function emailConfirmationToken($token)
+    {
+        $expire = \Yii::$app->params['user.emailConfirmationTokenExpire'];
+        $parts = explode('_', $token);
+        $timestamp = (int) end($parts);
+        if ($timestamp + $expire < time()) {
+            // token expired
+            return $this->andWhere('FALSE');
+        }
+        return $this->andWhere(['email_confirmation_token' => $token]);
+    }
 }
