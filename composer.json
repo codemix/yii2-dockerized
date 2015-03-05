@@ -10,7 +10,8 @@
 		"yiisoft/yii2": "2.0.*",
 		"yiisoft/yii2-bootstrap": "2.0.*",
 		"yiisoft/yii2-swiftmailer": "2.0.*",
-		"vlucas/phpdotenv": "1.0.*"
+		"vlucas/phpdotenv": "1.0.*",
+		"codemix/yii2-streamlog": "0.0.1"
 	},
 	"require-dev": {
 		"yiisoft/yii2-debug": "2.*",

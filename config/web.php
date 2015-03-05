@@ -31,14 +31,14 @@ $config = [
             'traceLevel' => getenv_default('YII_TRACELEVEL', 0),
             'targets' => [
                 [
-                    'class' => 'app\components\StdTarget',
-                    'stream' => 'stdout',
+                    'class' => 'codemix\streamlog\Target',
+                    'url' => 'php://stdout',
                     'levels' => ['info','trace'],
                     'logVars' => [],
                 ],
                 [
-                    'class' => 'app\components\StdTarget',
-                    'stream' => 'stderr',
+                    'class' => 'codemix\streamlog\Target',
+                    'url' => 'php://stderr',
                     'levels' => ['error', 'warning'],
                     'logVars' => [],
                 ],

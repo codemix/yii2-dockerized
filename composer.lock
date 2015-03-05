@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b5447b75b2278ca76c49195ee74021fc",
+    "hash": "281371b773d0368e3e94bc2548d29610",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -269,6 +269,45 @@
                 "markdown-extra"
             ],
             "time": "2014-10-25 16:16:49"
+        },
+        {
+            "name": "codemix/yii2-streamlog",
+            "version": "0.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/codemix/yii2-streamlog.git",
+                "reference": "08a5b0716ab07a63d5eb8299db99dc75ea250ef1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/codemix/yii2-streamlog/zipball/08a5b0716ab07a63d5eb8299db99dc75ea250ef1",
+                "reference": "08a5b0716ab07a63d5eb8299db99dc75ea250ef1",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "codemix\\streamlog\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Härtl",
+                    "email": "haertl.mike@gmail.com"
+                }
+            ],
+            "description": "A Yii 2 log target for streams in URL format",
+            "keywords": [
+                "log",
+                "stdout",
+                "stream",
+                "yii2"
+            ],
+            "time": "2015-03-05 09:47:30"
         },
         {
             "name": "ezyang/htmlpurifier",
