@@ -47,6 +47,10 @@ $config = [
         'request' => [
             'cookieValidationKey' => getenv('COOKIE_VALIDATION_KEY'),
         ],
+        'urlManager' => [
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
+        ],
         'user' => [
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
