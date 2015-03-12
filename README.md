@@ -32,7 +32,13 @@ your project requirements:
  * the available environment variables
  * the README (this file ;) )
 
-When you're done, you should commit your initial project to your git repository.
+This means, that you can (and probably will!) change the app template given here.
+It's based on my [personal Yii 2 base app](https://github.com/mikehaertl/yii2-base-app)
+but if you go through the sources you'll find that there's not so much special going on.
+So if you prefer a different app template, it should be easy to modify the given
+example app.
+
+When you're done, you should commit your initial project to *your* git repository.
 
 
 2. Setting up the development environment
@@ -116,7 +122,8 @@ This is a very simple workflow: In each environment the runtime image is built
 from the `Dockerfile`. Developers need to be informed whenever the `Dockerfile` changes
 so that they rebuild their local image.
 
-No images are shared, so the build step could take quite some time, depending on
+No images are shared between developers, so the initial and also each consecutive build step
+could take quite some time, depending on
 [how much](https://docs.docker.com/articles/dockerfile_best-practices/#build-cache)
 the `Dockerfile` has changed since the last build in this environment.
 
@@ -127,9 +134,9 @@ the `Dockerfile` has changed since the last build in this environment.
  * Quick and simple deployment
 
 Here we can take two approaches: With or without a base image. In both cases
-the `Dockerfile` should be organized in a way, that the "static", less changing parts
-should be on top of the `Dockerfile` and the "variable" or frequently changing
-parts (e.g. `COPY . /var/www/html`) are on the bottom of the file.
+the `Dockerfile` should be organized in a way, that the rather *static* or less changing parts
+should be on top of the `Dockerfile` and the *dynamic* or frequently changing
+parts (e.g. `COPY . /var/www/html`) at the bottom of the file.
 
 
 #### 4.2.1 Without a base image
@@ -152,9 +159,17 @@ it builds a new image.
 Here we use two Dockerfiles:
 
  * One for the base image, e.g. `Dockerfile.base` and
- * one for the final image, which extends from the base image
+ * one for the final image(s), which extends from the base image
 
-So we'd first move the current `Dockerfile` and create a base image:
+The base image stays the same for some time and is used as basis for
+many deployment images. This has the advantage that (hopefully) many
+files from the base image can be reused, whenever a new deployment
+image is built. So the actual release image layer will have a very
+small footprint and, in effect, once a base image is shared among
+developers and on production, there's not much data to be moved around
+with each release.
+
+To start we'd first move the current `Dockerfile` and create a base image:
 
 ```sh
 mv Dockerfile Dockerfile.base
@@ -189,15 +204,26 @@ docker build -t myregistry.com:5000/myapp:1.0.2
 ...
 ```
 
-After some time, when the modifications to the `base-1.0.0` image exceed a certain
-volume, we can create another base image:
+> Note: Version numbers here are only used to make the example clearer.
+> You'd probably use a different versioning scheme, especially if you
+> do continous deployments.
+
+After some releases your latest code will differ more and more from the base
+image. So more and more files will have changed since it was created and this
+will make your deployment images bigger and bigger with each release. To avoid
+this you can create an updated base image from your latest code:
 
 ```sh
 docker build -f Dockerfile.base -t myregistry.com:5000/myapp:base-1.1.0
 docker push myregistry.com:5000/myapp:base-1.1.0
 ```
 
-And modify the `FROM` line in the `Dockerfile` to use this image as basis:
+> Note: You may want to modify `Dockerfile.base` to extend from your old
+> base image first. This will save extra space, but add more file layers
+> to your docker images over time, which is limited to 127.
+
+Now we have an updated base image and can use that for ongoing development.
+We therefore have to update the `FROM` line in the `Dockerfile`:
 
 ```dockerfile
 FROM myregistry.com:5000/myapp:base-1.1.0
