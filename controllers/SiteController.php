@@ -6,10 +6,10 @@ use Yii;
 use yii\web\Controller;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
-use app\models\LoginForm;
 use app\models\User;
-use app\models\PasswordResetRequestForm;
-use app\models\ResetPasswordForm;
+use app\models\forms\LoginForm;
+use app\models\forms\PasswordResetRequestForm;
+use app\models\forms\ResetPasswordForm;
 
 class SiteController extends Controller
 {
