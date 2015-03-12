@@ -5,21 +5,21 @@
 defined('STDIN') or define('STDIN', fopen('php://stdin', 'r'));
 defined('STDOUT') or define('STDOUT', fopen('php://stdout', 'w'));
 
-require(__DIR__ . '/../vendor/autoload.php');
-require(__DIR__.'/config/env.php');
-require(__DIR__ . '/../vendor/yiisoft/yii2/Yii.php');
+require('/var/www/vendor/autoload.php');
+require('/var/www/html/config/env.php');
+require('/var/www/vendor/yiisoft/yii2/Yii.php');
 
 // Build web configuration
-$web = require(__DIR__.'/config/web.php');
-if (getenv_default('ENABLE_LOCALCONF', false) && file_exists(__DIR__.'/../config/local.php')) {
-    $local = require(__DIR__.'/config/local.php');
+$web = require('/var/www/html/config/web.php');
+if (getenv_default('ENABLE_LOCALCONF', false) && file_exists('/var/www/html/config/local.php')) {
+    $local = require('/var/www/html/config/local.php');
     $web = yii\helpers\ArrayHelper::merge($web, $local);
 }
 
 // Build console configuration
-$config = require(__DIR__.'/config/console.php');
-if (getenv_default('ENABLE_LOCALCONF', false) && file_exists(__DIR__.'/../config/console-local.php')) {
-    $local = require(__DIR__.'/config/console-local.php');
+$config = require('/var/www/html/config/console.php');
+if (getenv_default('ENABLE_LOCALCONF', false) && file_exists('/var/www/html/config/console-local.php')) {
+    $local = require('/var/www/html/config/console-local.php');
     $config = yii\helpers\ArrayHelper::merge($config, $local);
 }
 

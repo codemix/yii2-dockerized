@@ -1,7 +1,8 @@
 Yii 2 Dockerized
 ================
 
-A template for docker based Yii 2 applications.
+A template for Yii 2 applications based on the
+[codemix/yii2-base](https://registry.hub.docker.com/u/codemix/yii2-base/) docker image.
 
  * Ephemeral container which gets configured via environment variables
  * Optional local configuration overrides for development/debugging (git-ignored)
@@ -24,21 +25,22 @@ or, if you don't have composer installed, [download](https://github.com/codemix/
 and uncompress the files into a directory. You may then want modify some things to match
 your project requirements:
 
- * the `Dockerfile` e.g. to enable more PHP extensions.
+ * the `Dockerfile` e.g. to add PHP extensions.
  * the default machine setup in `.docker-composer-example`
  * the default configuration in `config/`
- * the dependencies in `composer.json` (requires update of `composer.lock`, see FAQ below)
+ * the dependencies in `composer.json`
  * the example models and initial DB migration
  * the available environment variables
  * the README (this file ;) )
 
 This means, that you can (and probably will!) change the app template given here.
+
 It's based on my [personal Yii 2 base app](https://github.com/mikehaertl/yii2-base-app)
 but if you go through the sources you'll find that there's not so much special going on.
-So if you prefer a different app template, it should be easy to modify the given
+If you prefer a different app template, it should be easy to modify the given
 example app.
 
-When you're done, you should commit your initial project to *your* git repository.
+When you're done, you should commit your initial project to **your** git repository.
 
 
 2. Setting up the development environment
@@ -48,13 +50,25 @@ For local environments we recommend to use [docker-compose](http://docs.docker.c
 Then bringing a new developer into the project is a matter of a few simple steps:
 
  * Clone the app sources from your repository
- * Create a local `docker-compose.yml` configuration file (see `docker-compose-example.yml`)
- * Add `ENABLE_ENV_FILE=1` to the `environment` section of your `docker-compose.yml`
+ * Create a local `docker-compose.yml` configuration file from `docker-compose-example.yml`
  * Copy the `.env-example` file to `.env`
- * Run DB migrations (see below)
+ * Run DB migrations
+
+To run the DB migrations you first will build your local image and then run `yii` inside:
+
+```sh
+docker-compose build web
+docker-compose run --rm web ./yii migrate
+```
+
+That's all!
 
 Now the app can be started with `docker-compose up` and should be available under
 [http://localhost:8080](http://localhost:8080) (or the IP address of your VM if you use boot2docker).
+
+
+2.1 Environment variables
+-------------------------
 
 As this template follows the [12 factor](http://12factor.net/) principles, all runtime
 configuration should happen via environment variables. So in production, you will use
@@ -85,8 +99,8 @@ The template so far uses the following configuration variables:
  * `SMTP_PASSWORD` the password for the SMTP server.
 
 
-3. Configuration files
-----------------------
+2.2 Configuration files
+-----------------------
 
 All configuration lives in 3 files in the `config/` directory.
 
@@ -107,13 +121,13 @@ the `web.php` and `console.php`. The files are ignored by git to not accidentall
 commit any local configs.
 
 
-4. Workflows
+3. Workflows
 ------------
 
 Docker is very versatile so you can come up with different workflows.
 
 
-### 4.1 Dockerfile based
+### 3.1 Dockerfile based
 
  * No docker registry required
  * Slower deployment due to extra build step
@@ -128,7 +142,7 @@ could take quite some time, depending on
 the `Dockerfile` has changed since the last build in this environment.
 
 
-### 4.2 Docker image based
+### 3.2 Docker image based
 
  * Requires a docker registry (either self-hosted or from 3rd party)
  * Quick and simple deployment
@@ -139,7 +153,7 @@ should be on top of the `Dockerfile` and the *dynamic* or frequently changing
 parts (e.g. `COPY . /var/www/html`) at the bottom of the file.
 
 
-#### 4.2.1 Without a base image
+#### 3.2.1 Without a base image
 
 We use a single `Dockerfile` and each time we want to make a deployment, we create
 a new tagged image and push it to the registry. This image can then be pulled to
@@ -154,7 +168,7 @@ their machine, as otherwhise docker couldn't reuse cached layers the next time
 it builds a new image.
 
 
-#### 4.2.2 Using a base image
+#### 3.2.2 Using a base image
 
 Here we use two Dockerfiles:
 
@@ -231,10 +245,10 @@ FROM myregistry.com:5000/myapp:base-1.1.0
 
 
 
-5. FAQ
+4. FAQ
 ------
 
-### 5.1 How can i run yii console commands?
+### 4.1 How can i run yii console commands?
 
 ```sh
 docker-compose run --rm web yii migrate
@@ -242,7 +256,7 @@ docker-compose run --rm web yii mycommand/myaction
 ```
 
 
-### 5.2 Where are composer packages installed?
+### 4.2 Where are composer packages installed?
 
 Composer packages are installed inside the container but outside of the shared
 directory. During development we usually mount the local app directory into the
@@ -254,7 +268,7 @@ By keeping the directory outside, we circumvent this issue. Docker images will
 always contain all required composer dependencies and use those at runtime.
 
 
-### 5.3 How can I update or install new composer packages?
+### 4.3 How can I update or install new composer packages?
 
 To update or install new packages you first need an updated `composer.lock` file.
 Then the next time you issue `docker-compose build` (or manually do `docker build ...`) it will
@@ -279,7 +293,7 @@ docker-compose build
 ```
 
 
-### 5.4 I have a permission issue with runtime / web/assets directory. How to fix it?
+### 4.4 I have a permission issue with runtime / web/assets directory. How to fix it?
 
 This is caused by a missing feature in docker: You can not set the permissions of
 shared volumes. As a workaround make the directories world writeable:
@@ -289,7 +303,7 @@ chmod a+rwx runtime/ web/assets/
 ```
 
 
-### 5.5 How can I log to a file?
+### 4.5 How can I log to a file?
 
 The default log configuration follows the Docker convention to log to `STDOUT`
 and `STDERR`. You should better not change this for production. But you can
@@ -299,3 +313,22 @@ in your local `runtime/logs/` directory. Note, that this directory will never
 be copied into the container, so there's no risk, that you end up with a
 bloated image.
 
+
+### 4.6 How can I add PHP extensions?
+
+Since the [codemix/yii2-base]() image extends from the official [php](https://registry.hub.docker.com/u/library/php/)
+image, you can use `docker-php-ext-install` in your Dockerfile. Here's an example:
+
+```
+RUN apt-get update \
+    && apt-get -y install \
+            libfreetype6-dev \
+            libjpeg62-turbo-dev \
+            libmcrypt-dev \
+            libpng12-dev \
+        --no-install-recommends \
+    && rm -r /var/lib/apt/lists/* \
+    && docker-php-ext-install iconv mcrypt \
+    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-install gd
+```
