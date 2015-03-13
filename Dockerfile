@@ -1,4 +1,5 @@
 FROM codemix/yii2-base:2.0.3-php-5.6.6-apache
+#FROM codemix/yii2-base:2.0.3-php-fpm-5.6.6
 
 # Composer packages are installed first. This will only add packages
 # that are not already in the yii2-base image.
@@ -16,3 +17,6 @@ COPY . /var/www/html
 RUN mkdir runtime web/assets \
     && chown www-data:www-data runtime web/assets
 
+# Expose everything under /var/www (vendor + html)
+# This is only required for the nginx setup
+VOLUME ["/var/www"]

@@ -12,6 +12,29 @@ web:
         ENABLE_ENV_FILE: 1
         ENABLE_LOCALCONF: 1
         API_TOKEN: "<YOUR GITHUB API TOKEN>"
+
+# For php-fpm replace 'web' with these two configurations:
+#app:
+#    build: ./
+#    expose:
+#        - "9000"
+#    volumes:
+#        - ./:/var/www/html/
+#    links:
+#        - db
+#    environment:
+#        ENABLE_ENV_FILE: 1
+#        API_TOKEN: "<YOUR GITHUB API TOKEN>"
+#
+#nginx:
+#    build: ./nginx
+#    ports:
+#        - "8080:80"
+#    links:
+#        - app
+#    volumes_from:
+#        - app
+
 db:
     image: mysql:5.6
     ports:
@@ -23,3 +46,4 @@ db:
         MYSQL_DATABASE: web
         MYSQL_USER: web
         MYSQL_PASSWORD: secret
+

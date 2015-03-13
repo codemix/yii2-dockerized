@@ -9,85 +9,103 @@ A template for Yii 2 applications based on the
  * Base scaffold code for login, signup and forgot-password actions
  * Flat configuration file structure
  * Support docker image based development workflow
+ * Support for **Apache + mod_php** and **nginx + php-fpm** (HHVM coming soon!)
 
 
-1. Creating a new project
--------------------------
+1. Quickstart
+-------------
 
-To use this template, you first need to have [docker](http://www.docker.com) (>=1.5.0) installed.
-Then you can start a new project with:
+You need to have [docker](http://www.docker.com) (>=1.5.0) and
+[docker-compose](https://docs.docker.com/compose/install/) installed.
+Then you can quickly start a new app with
 
 ```sh
 composer create-project --no-install codemix/yii2-dockerized myproject
-```
-
-or, if you don't have composer installed, [download](https://github.com/codemix/yii2-dockerized/releases)
-and uncompress the files into a directory. You may then want modify some things to match
-your project requirements:
-
- * the `Dockerfile` e.g. to add PHP extensions.
- * the default machine setup in `.docker-composer-example`
- * the default configuration in `config/`
- * the dependencies in `composer.json`
- * the example models and initial DB migration
- * the available environment variables
- * the README (this file ;) )
-
-This means, that you can (and probably will!) change the app template given here.
-
-It's based on my [personal Yii 2 base app](https://github.com/mikehaertl/yii2-base-app)
-but if you go through the sources you'll find that there's not so much special going on.
-If you prefer a different app template, it should be easy to modify the given
-example app.
-
-When you're done, you should commit your initial project to **your** git repository.
-
-
-2. Setting up the development environment
------------------------------------------
-
-For local environments we recommend to use [docker-compose](http://docs.docker.com/compose/install/).
-Then bringing a new developer into the project is a matter of a few simple steps:
-
- * Clone the app sources from your repository
- * Create a local `docker-compose.yml` configuration file from `docker-compose-example.yml`
- * Copy the `.env-example` file to `.env`
- * Run DB migrations
-
-To run the DB migrations you first will build your local image and then run `yii` inside:
-
-```sh
-docker-compose build web
+cp docker-compose-example.yml docker-compose.yml
+docker-compose up
+# From another terminal window:
 docker-compose run --rm web ./yii migrate
 ```
 
-That's all!
+This may take some minutes to download the required docker images. When
+done, you can access the new app from [http://localhost:8080](http://localost:8080).
 
-Now the app can be started with `docker-compose up` and should be available under
-[http://localhost:8080](http://localhost:8080) (or the IP address of your VM if you use boot2docker).
+> *Note:* If you're ony Windows or Mac OS you have to use [boot2docker](https://github.com/boot2docker/boot2docker)
+> instead. There's also a [workaround](https://github.com/artsemis/docker-docker-compose)
+> to make `docker-compose` available.
+
+2. How To Use
+-------------
+
+This project is a template for your own Yii2 applications. You can use it as a starting
+point and modify it to fit your requirements. It's also kind of an alternative to the official
+yii2 base and advanced apps.
 
 
-2.1 Environment variables
--------------------------
+### 2.1 Starting A New Project
 
-As this template follows the [12 factor](http://12factor.net/) principles, all runtime
-configuration should happen via environment variables. So in production, you will use
-env vars e.g. to pass DB credentials to your container.
+As shown in the quickstart you will first create a new project with `composer` or, if you don't
+have composer installed, [download](https://github.com/codemix/yii2-dockerized/releases)
+and uncompress the files into a new directory.
 
-For local development you could configure those vars in the `environment` section of your
-`docker-compose.yml`. But this requires to rebuild the container whenever you change any var. That's
-why we prefer `.env` files (using [phpdotenv](https://github.com/vlucas/phpdotenv)) for local
-development. The app will pick up any changes there immediately.
+Before you commit the app into *your* repository, you first will want to set up the project
+for your purpose. Therefore you should check the following files and directories:
 
-The template so far uses the following configuration variables:
+ * `Dockerfile`:  Select the base image (Apache + mod_php or php-fpm + nginx) and add PHP extensions
+ * `docker-compose-example.yml`: Provide an example machine configuration for other developers
+ * `config/`: Update the default configuration
+ * `.env-example`: Add/remove environment variables
+ * `composer.json`: Add/remove dependencies for your project
+ * `migrations/`: Update the initial DB migration to match your DB model
+ * `README.md`: Describe *your* application
 
- * `ENABLE_ENV_FILE` whether to load env vars from a local `.env` file. Default is `0`.
+When you're done, you will commit the changes to your repository to make it available
+for other developers in your team.
+
+
+### 2.2 Setting Up The Development Environment
+
+When you have the project in your repository, it's easy to set up a new development environment,
+e.g. for a new team member:
+
+```sh
+git clone <your-repo-url> ./myapp
+cd myapp
+cp docker-compose-example.yml docker-compose.yml
+cp .env-example .env
+docker-compose up
+# From another terminal window:
+docker-compose run --rm web ./yii migrate
+```
+
+Now you can work on the source files locally and immediately see the results under the URL
+of the container. This is made possible, because in the default `docker-compose.yml` we
+map the local project directory into the `/var/www/html` directory of the container.
+
+
+### 2.3 Environment Variables
+
+This template follows the [12 factor](http://12factor.net/) principles. This means, that
+all dynamic configuration parameters like for example database credentials or secret
+API keys are passed to the container through **environment variables**.
+
+For local development you could configure those variables in the `environment` section of your
+`docker-compose.yml`. But this requires to rebuild the container each time you change a variable.
+That's why we use [phpdotenv](https://github.com/vlucas/phpdotenv) in this project, to keep
+this configuration in a local `.env` file. Changes there are picked up immediately.
+
+In production you will use whatever means are neccessary to set the environment variables.
+This depends on how you host your docker image (or if you use docker in production at all).
+
+The template uses the following configuration variables:
+
+ * `ENABLE_ENV_FILE` whether to load env vars from a local `.env` file. Default is `0`. **This can only be set in the `docker-compose.yml`.**
  * `ENABLE_LOCALCONF` whether to allow local overrides for web and console configuration (see below). Default is `0`.
  * `YII_DEBUG` whether to enable debug mode for Yii. Default is `0`.
  * `YII_ENV` the Yii app environment. Either `prod` (default) or `dev`
  * `YII_TRACELEVEL` the [traceLevel](http://www.yiiframework.com/doc-2.0/yii-log-dispatcher.html#$traceLevel-detail)
     to use for Yii logging. Default is `0`.
- * `COOKIE_VALIDATION_KEY` the unique [cookie validation key](http://www.yiiframework.com/doc-2.0/yii-web-request.html#$cookieValidationKey-detail) required by Yii. This variable is mandatory.
+ * `COOKIE_VALIDATION_KEY` the unique [cookie validation key](http://www.yiiframework.com/doc-2.0/yii-web-request.html#$cookieValidationKey-detail) required by Yii. **This variable is mandatory.**
  * `DB_DSN` the [DSN](http://php.net/manual/en/pdo.construct.php) to use for DB connection.
     If this is not set, it will try to create one from docker's `DB_PORT_3306_TCP_ADDR`
     and assume MySQL as DBMS and `web` as DB name. If this is not set either, an exception
@@ -99,26 +117,42 @@ The template so far uses the following configuration variables:
  * `SMTP_PASSWORD` the password for the SMTP server.
 
 
-2.2 Configuration files
------------------------
+### 2.4 Configuration Files
 
-All configuration lives in 3 files in the `config/` directory.
+All configuration lives in three files in the `config/` directory.
 
- * `web.php` configuration of the web app
- * `console.php` configuration of the console app (reused parts of `web.php`, see examples)
+ * `web.php` configuration for the web application
+ * `console.php` configuration for the console application
  * `params.php` application parameters for both web and console application
 
-For maximum flexibility you can also use local overrides for web and console configuration
-files. You therefore first need to set the `ENABLE_LOCALCONF` variable to `1` in your
-`docker-compose.yml` or `.env` file. Then the app will check if any of the following files exists:
+These three files are committed to your repository. But sometimes it's useful during
+development, to override some settings, without accidentally committing them to the
+repository. Therefore you can create local override files:
 
- * `local.php` optional local overrides to the web config
- * `console-local.php` an optional file with local overrides to the console configuration
+ * `local.php` local overrides for the web configuration
+ * `console-local.php` local overrides for the console configuration
 
-Both have the same format as `web.php` and `console.php` and are merged into the respective
+To enable this feature, you must set `ENABLE_LOCALCONF` variable to `1` in your
+`docker-compose.yml` or `.env` file.
+
+Both files the same format as `web.php` and `console.php` and are merged into the respective
 configuration. So you only have to add those parts of the configuration that differ from
 the `web.php` and `console.php`. The files are ignored by git to not accidentally
 commit any local configs.
+
+### 2.5 PHP-FPM + Nginx Based setups
+
+You can also select the php-fpm base image if you prefer. This will require two
+containers, one with php-fpm and one with nginx. There's already a commented out
+example in the `docker-compose.yml` file. Also have a look at the Nginx configuration
+in `nginx/nginx.conf` which you may want to modify. The most important setting is
+the hostname. This must match whatever you have used in your `docker-compose.yml`
+for the app container. Default is `app`:
+
+
+```
+fastcgi_pass   app:9000;
+```
 
 
 3. Workflows
