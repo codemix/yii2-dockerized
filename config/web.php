@@ -1,8 +1,8 @@
 <?php
 $config = [
     'id' => 'basic',
-    'basePath' => dirname(__DIR__),
-    'vendorPath' => realpath(__DIR__.'/../../vendor'),
+    'basePath' => '/var/www/html',
+    'vendorPath' => '/var/www/vendor',
     'components' => [
         'cache' => [
             'class' => 'yii\caching\ApcCache',

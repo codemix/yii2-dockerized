@@ -9,8 +9,12 @@ A template for Yii 2 applications based on the
  * Base scaffold code for login, signup and forgot-password actions
  * Flat configuration file structure
  * Support docker image based development workflow
- * Support for **Apache + mod_php** and **nginx + php-fpm** (HHVM coming soon!)
 
+The `yii2-base` image comes in three flavours:
+
+ * **Apache with PHP module** (based on `php:5.6.6-apache`)
+ * **PHP-FPM** (based on `php:5.6.6-fpm`)
+ * **HHVM** (based on `estebanmatias92/hhvm:3.5.1-fastcgi`)
 
 1. Quickstart
 -------------
@@ -49,7 +53,18 @@ have composer installed, [download](https://github.com/codemix/yii2-dockerized/r
 and uncompress the files into a new directory.
 
 Before you commit the app into *your* repository, you first will want to set up the project
-for your purpose. Therefore you should check the following files and directories:
+for your purpose.
+
+The first step is to select the `yii2-base` image flavour in the `Dockerfile`. So uncomment
+the apropriate line:
+
+```
+FROM codemix/yii2-base:2.0.3-apache
+#FROM codemix/yii2-base:2.0.3-php-fpm
+#FROM codemix/yii2-base:2.0.3-hhvm
+```
+
+Then you should check the following files and directories:
 
  * `Dockerfile`:  Select the base image (Apache + mod_php or php-fpm + nginx) and add PHP extensions
  * `docker-compose-example.yml`: Provide an example machine configuration for other developers
@@ -161,7 +176,7 @@ fastcgi_pass   app:9000;
 Docker is very versatile so you can come up with different workflows.
 
 
-### 3.1 Dockerfile based
+### 3.1 Dockerfile Based
 
  * No docker registry required
  * Slower deployment due to extra build step
@@ -176,7 +191,7 @@ could take quite some time, depending on
 the `Dockerfile` has changed since the last build in this environment.
 
 
-### 3.2 Docker image based
+### 3.2 Docker Image Based
 
  * Requires a docker registry (either self-hosted or from 3rd party)
  * Quick and simple deployment
@@ -187,7 +202,7 @@ should be on top of the `Dockerfile` and the *dynamic* or frequently changing
 parts (e.g. `COPY . /var/www/html`) at the bottom of the file.
 
 
-#### 3.2.1 Without a base image
+#### 3.2.1 Without A Base Image
 
 We use a single `Dockerfile` and each time we want to make a deployment, we create
 a new tagged image and push it to the registry. This image can then be pulled to
@@ -202,7 +217,7 @@ their machine, as otherwhise docker couldn't reuse cached layers the next time
 it builds a new image.
 
 
-#### 3.2.2 Using a base image
+#### 3.2.2 Using A Base Image
 
 Here we use two Dockerfiles:
 
@@ -282,7 +297,7 @@ FROM myregistry.com:5000/myapp:base-1.1.0
 4. FAQ
 ------
 
-### 4.1 How can i run yii console commands?
+### 4.1 How Can I Run Yii Console Commands?
 
 ```sh
 docker-compose run --rm web yii migrate
@@ -290,7 +305,7 @@ docker-compose run --rm web yii mycommand/myaction
 ```
 
 
-### 4.2 Where are composer packages installed?
+### 4.2 Where Are Composer Packages Installed?
 
 Composer packages are installed inside the container but outside of the shared
 directory. During development we usually mount the local app directory into the
@@ -302,7 +317,7 @@ By keeping the directory outside, we circumvent this issue. Docker images will
 always contain all required composer dependencies and use those at runtime.
 
 
-### 4.3 How can I update or install new composer packages?
+### 4.3 How can I Update Or Install New Composer Packages?
 
 To update or install new packages you first need an updated `composer.lock` file.
 Then the next time you issue `docker-compose build` (or manually do `docker build ...`) it will
@@ -327,17 +342,7 @@ docker-compose build
 ```
 
 
-### 4.4 I have a permission issue with runtime / web/assets directory. How to fix it?
-
-This is caused by a missing feature in docker: You can not set the permissions of
-shared volumes. As a workaround make the directories world writeable:
-
-```sh
-chmod a+rwx runtime/ web/assets/
-```
-
-
-### 4.5 How can I log to a file?
+### 4.4 How Can I Log To A File?
 
 The default log configuration follows the Docker convention to log to `STDOUT`
 and `STDERR`. You should better not change this for production. But you can
@@ -348,7 +353,7 @@ be copied into the container, so there's no risk, that you end up with a
 bloated image.
 
 
-### 4.6 How can I add PHP extensions?
+### 4.6 How Can I Add PHP / HHVM Extensions?
 
 Since the [codemix/yii2-base]() image extends from the official [php](https://registry.hub.docker.com/u/library/php/)
 image, you can use `docker-php-ext-install` in your Dockerfile. Here's an example:
@@ -366,3 +371,5 @@ RUN apt-get update \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install gd
 ```
+
+For HHVM extension please check the [hhvm](https://registry.hub.docker.com/u/estebanmatias92/hhvm/) base image for details.

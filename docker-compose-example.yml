@@ -1,3 +1,4 @@
+# For *-apache base image
 web:
     build: ./
     ports:
@@ -13,7 +14,7 @@ web:
         ENABLE_LOCALCONF: 1
         API_TOKEN: "<YOUR GITHUB API TOKEN>"
 
-# For php-fpm replace 'web' with these two configurations:
+# for *-php-fpm and *-hhvm base image
 #app:
 #    build: ./
 #    expose:
