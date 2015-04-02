@@ -28,6 +28,7 @@ You need to have [docker](http://www.docker.com) (>=1.5.0) and
 
 ```sh
 composer create-project --no-install codemix/yii2-dockerized myproject
+cd myproject
 cp docker-compose-example.yml docker-compose.yml
 docker-compose up
 # From another terminal window:

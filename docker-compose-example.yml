@@ -46,5 +46,5 @@ db:
         MYSQL_ROOT_PASSWORD: secret-root
         MYSQL_DATABASE: web
         MYSQL_USER: web
-        MYSQL_PASSWORD: secret
+        MYSQL_PASSWORD: web
 
