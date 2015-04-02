@@ -121,7 +121,7 @@ class SiteController extends Controller
     {
         $user = User::find()->emailConfirmationToken($token)->one();
 
-        if ($user!==null && $user->removeEmailConfirmationToken(true)) {
+        if ($user!==null && $user->confirmEmail()) {
             Yii::$app->getUser()->login($user);
             return $this->goHome();
         }

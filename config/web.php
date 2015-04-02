@@ -9,9 +9,9 @@ $config = [
         ],
         'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => DB_DSN,
-            'username' => getenv_default('DB_USER', 'web'),
-            'password' => getenv_default('DB_PASSWORD', 'web'),
+            'dsn' => \DockerEnv::dbDsn(),
+            'username' => \DockerEnv::dbUser(),
+            'password' => \DockerEnv::dbPassword(),
             'charset' => 'utf8',
             'tablePrefix' => '',
         ],
@@ -22,13 +22,13 @@ $config = [
             'class' => 'yii\swiftmailer\Mailer',
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
-                'host' => getenv('SMTP_HOST'),
-                'username' => getenv('SMTP_USER'),
-                'password' => getenv('SMTP_PASSWORD'),
+                'host' => \DockerEnv::get('SMTP_HOST'),
+                'username' => \DockerEnv::get('SMTP_USER'),
+                'password' => \DockerEnv::get('SMTP_PASSWORD'),
             ],
         ],
         'log' => [
-            'traceLevel' => getenv_default('YII_TRACELEVEL', 0),
+            'traceLevel' => \DockerEnv::get('YII_TRACELEVEL', 0),
             'targets' => [
                 [
                     'class' => 'codemix\streamlog\Target',
@@ -45,7 +45,7 @@ $config = [
             ],
         ],
         'request' => [
-            'cookieValidationKey' => getenv('COOKIE_VALIDATION_KEY'),
+            'cookieValidationKey' => \DockerEnv::get('COOKIE_VALIDATION_KEY', null, !YII_ENV_TEST),
         ],
         'urlManager' => [
             'enablePrettyUrl' => true,
@@ -56,7 +56,7 @@ $config = [
             'enableAutoLogin' => true,
         ],
     ],
-    'params' => require(__DIR__.'/params.php'),
+    'params' => require('/var/www/html/config/params.php'),
 ];
 
 if (YII_ENV_DEV) {

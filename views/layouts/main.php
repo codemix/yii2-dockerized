@@ -6,10 +6,9 @@ use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 use app\widgets\Alert;
 
-/**
- * @var \yii\web\View $this
- * @var string $content
- */
+/* @var \yii\web\View $this */
+/* @var string $content */
+
 AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>

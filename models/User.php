@@ -205,44 +205,50 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Generates new email confirmation token
+     * @param bool $save whether to save the record. Default is `false`.
+     * @return bool|null whether the save was successful or null if $save was false.
      */
-    public function generateEmailConfirmationToken()
+    public function generateEmailConfirmationToken($save = false)
     {
         $this->email_confirmation_token = Yii::$app->security->generateRandomString() . '_' . time();
+        if ($save) {
+            return $this->save();
+        }
     }
 
     /**
      * Generates new password reset token
-     */
-    public function generatePasswordResetToken()
-    {
-        $this->password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
-    }
-
-    /**
-     * Removes password reset token
      * @param bool $save whether to save the record. Default is `false`.
      * @return bool|null whether the save was successful or null if $save was false.
      */
-    public function removePasswordResetToken($save = false)
+    public function generatePasswordResetToken($save = false)
     {
-        $this->password_reset_token = null;
+        $this->password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
         if ($save) {
             return $this->save();
         }
     }
 
     /**
-     * Removes email confirmation token and sets is_email_verified to true
-     * @param bool $save whether to save the record. Default is `false`.
-     * @return bool|null whether the save was successful or null if $save was false.
+     * Resets to a new password and deletes the password reset token.
+     * @param string $password the new password for this user.
+     * @return bool whether the record was updated successfully
      */
-    public function removeEmailConfirmationToken($save = false)
+    public function resetPassword($password)
+    {
+        $this->setPassword($password);
+        $this->password_reset_token = null;
+        return $this->save();
+    }
+
+    /**
+     * Confirms an email an deletes the email confirmation token.
+     * @return bool whether the record was updated successfully
+     */
+    public function confirmEmail()
     {
         $this->email_confirmation_token = null;
         $this->is_email_verified = 1;
-        if ($save) {
-            return $this->save();
-        }
+        return $this->save();
     }
 }

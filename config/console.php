@@ -1,5 +1,6 @@
 <?php
-// Web configuration is available in $web
+/* @var array() $web the web configuration */
+$web = self::webConfig();
 return [
     'id' => $web['id'],
     'basePath' => $web['basePath'],

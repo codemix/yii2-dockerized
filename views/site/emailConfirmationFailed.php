@@ -2,11 +2,8 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-/**
- * @var yii\web\View $this
- * @var yii\widgets\ActiveForm $form
- * @var \frontend\models\User $model
- */
+/* @var yii\web\View $this */
+
 $this->title = 'Signup';
 $this->params['breadcrumbs'][] = $this->title;
 $params = Yii::$app->params;
