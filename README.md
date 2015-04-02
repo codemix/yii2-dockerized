@@ -1,6 +1,9 @@
 Yii 2 Dockerized
 ================
 
+[![Latest Stable Version](https://poser.pugx.org/codemix/yii2-dockerized/v/stable.svg)](https://packagist.org/packages/codemix/yii2-dockerized)
+[![Total Downloads](https://poser.pugx.org/codemix/yii2-dockerized/downloads.svg)](https://packagist.org/packages/codemix/yii2-dockerized)
+
 A template for Yii 2 applications based on the
 [codemix/yii2-base](https://registry.hub.docker.com/u/codemix/yii2-base/) docker image.
 
