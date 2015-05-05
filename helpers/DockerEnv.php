@@ -32,6 +32,9 @@ class DockerEnv
         // Define main environment variables
         if (isset($_ENV['YII_DEBUG'])) {
             define('YII_DEBUG', (bool)$_ENV['YII_DEBUG']);
+            if (YII_DEBUG) {
+                error_reporting(E_ALL);
+            }
         }
         if (isset($_ENV['YII_ENV'])) {
             define('YII_ENV', $_ENV['YII_ENV']);
@@ -81,7 +84,7 @@ class DockerEnv
      * @param bool $required whether the var must be set. $default is ignored in this case. Default is `false`.
      * @return mixed the content of the environment variable or $default if not set
      */
-    public function get($key, $default = null, $required = false)
+    public static function get($key, $default = null, $required = false)
     {
         if ($required) {
             Dotenv::required($key);
