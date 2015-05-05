@@ -218,10 +218,14 @@ and [Yii 2](http://www.yiiframework.com/doc-2.0/guide-test-overview.html) docume
 To run test you only need one simple command inside the `tests/` directory:
 
 ```sh
-docker-compose run --rm test codecept run
+docker-compose run --rm test
 ```
 
-Of course you can use all of the available options to the `codecept` command.
+You can also specify a specific `codecept` command:
+
+```sh
+docker-compose run --rm test codecept run functional
+```
 
 ### 3.4 Files and Directories
 
