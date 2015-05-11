@@ -65,9 +65,9 @@ The first step is to select the `yii2-base` image flavour in the `Dockerfile`. S
 the apropriate line:
 
 ```
-FROM codemix/yii2-base:2.0.3-apache
-#FROM codemix/yii2-base:2.0.3-php-fpm
-#FROM codemix/yii2-base:2.0.3-hhvm
+FROM codemix/yii2-base:2.0.4-apache
+#FROM codemix/yii2-base:2.0.4-php-fpm
+#FROM codemix/yii2-base:2.0.4-hhvm
 ```
 
 Then you should check the following files and directories:
