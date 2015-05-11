@@ -30,6 +30,7 @@ You need to have [docker](http://www.docker.com) (>=1.5.0) and
 composer create-project --no-install codemix/yii2-dockerized myproject
 cd myproject
 cp docker-compose-example.yml docker-compose.yml
+cp .env-example .env
 docker-compose up
 # From another terminal window:
 docker-compose run --rm web ./yii migrate
