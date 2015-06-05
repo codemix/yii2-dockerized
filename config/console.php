@@ -12,9 +12,16 @@ return [
         'log' => [
             'targets' => [
                 [
-                    'class' => 'yii\log\FileTarget',
+                    'class' => 'codemix\streamlog\Target',
+                    'url' => 'php://stdout',
+                    'levels' => ['info','trace'],
+                    'logVars' => [],
+                ],
+                [
+                    'class' => 'codemix\streamlog\Target',
+                    'url' => 'php://stderr',
                     'levels' => ['error', 'warning'],
-                    'logFile' => '/proc/self/fd/2',
+                    'logVars' => [],
                 ],
             ],
         ],
