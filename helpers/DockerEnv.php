@@ -53,10 +53,15 @@ class DockerEnv
      */
     public static function webConfig($_files = [], $_config = [])
     {
-        if (self::get('ENABLE_LOCALCONF', false) && file_exists(self::APP_DIR.'config/local.php')) {
-            array_unshift($_files, self::APP_DIR.'config/local.php');
+        if (YII_ENV_TEST) {
+            array_unshift($_files, self::APP_DIR.'tests/codeception/config/acceptance.php');
+        } else {
+            if (self::get('ENABLE_LOCALCONF', false) && file_exists(self::APP_DIR.'config/local.php')) {
+                array_unshift($_files, self::APP_DIR.'config/local.php');
+            }
+            array_unshift($_files, self::APP_DIR.'config/web.php');
         }
-        array_unshift($_files, self::APP_DIR.'config/web.php');
+
         return self::loadConfigs($_files, $_config);
     }
 
