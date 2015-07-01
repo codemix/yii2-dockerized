@@ -125,14 +125,21 @@ This depends on how you host your docker image (or if you use docker in producti
 
 #### 2.3.1 List of environment variables
 
- * `ENABLE_ENV_FILE` whether to load env vars from a local `.env` file. Default is `0`. **This can only be set in the `docker-compose.yml`.**
+> Note: Some variables can only be set in the `docker-compose.yml` (marked with **`dc-only`**).
+
+**Mandatory:**
+
+ * `COOKIE_VALIDATION_KEY` the unique [cookie validation key](http://www.yiiframework.com/doc-2.0/yii-web-request.html#$cookieValidationKey-detail) required by Yii.
+
+**Optional:**
+
+ * `API_TOKEN` (**`dc-only`**) the github API token for composer updates.
+ * `ENABLE_ENV_FILE` (**`dc-only`**) whether to load env vars from a local `.env` file. Default is `0`.
  * `ENABLE_LOCALCONF` whether to allow local overrides for web and console configuration (see below). Default is `0`.
  * `YII_DEBUG` whether to enable debug mode for Yii. Default is `0`.
- * `YII_ENV` the Yii app environment. Either `prod` (default) or `dev` (you should not use `test` as this is reserved for the testing container).
+ * `YII_ENV` the Yii app environment. Either `prod` (default) or `dev`. Do not use `test` as this is reserved for the testing container!
  * `YII_TRACELEVEL` the [traceLevel](http://www.yiiframework.com/doc-2.0/yii-log-dispatcher.html#$traceLevel-detail)
     to use for Yii logging. Default is `0`.
- * `COOKIE_VALIDATION_KEY` the unique [cookie validation key](http://www.yiiframework.com/doc-2.0/yii-web-request.html#$cookieValidationKey-detail) required by Yii.
-    **This variable is mandatory.**
  * `DB_DSN` the [DSN](http://php.net/manual/en/pdo.construct.php) to use for DB connection. Defaults to `mysql:host=db;dbname=web` if not set.
  * `DB_USER` the DB username. Defaults to `web` if not set.
  * `DB_PASSWORD` the DB password. Defaults to `web` if not set.
@@ -418,27 +425,18 @@ always contain all required composer dependencies and use those at runtime.
 
 ### 5.3 How can I Update Or Install New Composer Packages?
 
-To update or install new packages you first need an updated `composer.lock` file.
-Then the next time you issue `docker-compose build` (or manually do `docker build ...`) it will
-pick up the changed file and create a new docker image with the updated packages.
-
-Due to the nasty API rate limitation on github, you can't just run `composer` inside
-our `web` container. You first have to create a
-[personal API token](https://github.com/blog/1509-personal-api-tokens) at github
-and expose it in your `docker-compose.yml` file as `API_TOKEN` env var.
-
-Then use our custom `composer` wrapper script as follows (Note the important `./`
-before the composer command):
+To update or install new packages you first need an updated local `composer.lock` file.
+Then the next time you issue `docker-compose build` it will pick up the changed
+file and create a new docker image with the updated packages inside:
 
 ```sh
-docker-compose run --rm web ./composer update my/package
-```
-
-Now you should have an updated `composer.lock` file and can rebuild your container:
-
-```sh
+docker-compose run --rm web composer update my/package
 docker-compose build
 ```
+
+> Note: If you face the nasty API rate limit issue with github, you can create a
+[personal API token](https://github.com/blog/1509-personal-api-tokens)
+and expose it in your `docker-compose.yml` file as `API_TOKEN` env var.
 
 ### 5.4 How can I make composer packages available locally?
 
