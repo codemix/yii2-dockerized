@@ -16,9 +16,9 @@ A template for Yii 2 applications based on the
 
 The `yii2-base` image comes in three flavours:
 
- * **Apache with PHP module** (based on `php:5.6.6-apache`)
- * **PHP-FPM** (based on `php:5.6.6-fpm`)
- * **HHVM** (based on `estebanmatias92/hhvm:3.5.1-fastcgi`)
+ * **Apache with PHP module** (based on `php:5.6.10-apache`)
+ * **PHP-FPM** (based on `php:5.6.10-fpm`)
+ * **HHVM** (based on `estebanmatias92/hhvm:3.7.0-fastcgi`)
 
 1. Quickstart
 -------------
@@ -65,9 +65,9 @@ The first step is to select the `yii2-base` image flavour in the `Dockerfile`. S
 the apropriate line:
 
 ```
-FROM codemix/yii2-base:2.0.4-apache
-#FROM codemix/yii2-base:2.0.4-php-fpm
-#FROM codemix/yii2-base:2.0.4-hhvm
+FROM codemix/yii2-base:2.0.5-apache
+#FROM codemix/yii2-base:2.0.5-php-fpm
+#FROM codemix/yii2-base:2.0.5-hhvm
 ```
 
 Then you should check the following files and directories:
