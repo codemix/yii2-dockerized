@@ -1,5 +1,4 @@
 <?php
-use \Dotenv;
 use yii\helpers\ArrayHelper;
 
 /**
