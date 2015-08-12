@@ -24,7 +24,7 @@ class DockerEnv
         require('/var/www/vendor/autoload.php');
 
         // Load .env file if enabled and if it exists
-        if (isset($_ENV['ENABLE_ENV_FILE']) && $_ENV['ENABLE_ENV_FILE'] && file_exists(self::APP_DIR.'.env')) {
+        if (getenv('ENABLE_ENV_FILE') && file_exists(self::APP_DIR.'.env')) {
             Dotenv::load(self::APP_DIR);
         }
 
