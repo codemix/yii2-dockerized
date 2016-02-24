@@ -14,6 +14,14 @@ web:
         ENABLE_LOCALCONF: 1
         API_TOKEN: "<YOUR GITHUB API TOKEN>"
 
+    # Uncomment to autostart at boottime
+    #restart: always
+
+    # Uncomment to send log output to syslog
+    #log_driver: "syslog"
+    #log_opt:
+    #    tag: "docker-web"
+
 # for *-php-fpm and *-hhvm base image
 #app:
 #    build: ./
@@ -25,6 +33,7 @@ web:
 #        - db
 #    environment:
 #        ENABLE_ENV_FILE: 1
+#        ENABLE_LOCALCONF: 1
 #        API_TOKEN: "<YOUR GITHUB API TOKEN>"
 #
 #nginx:
@@ -47,4 +56,7 @@ db:
         MYSQL_DATABASE: web
         MYSQL_USER: web
         MYSQL_PASSWORD: web
+
+    # Uncomment to autostart at boottime
+    #restart: always
 
