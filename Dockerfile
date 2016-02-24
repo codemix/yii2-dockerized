@@ -1,6 +1,6 @@
-FROM codemix/yii2-base:2.0.6-apache
-#FROM codemix/yii2-base:2.0.6-php-fpm
-#FROM codemix/yii2-base:2.0.6-hhvm
+FROM codemix/yii2-base:2.0.7-apache
+#FROM codemix/yii2-base:2.0.7-php-fpm
+#FROM codemix/yii2-base:2.0.7-hhvm
 
 
 # Composer packages are installed first. This will only add packages
