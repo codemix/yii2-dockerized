@@ -39,7 +39,11 @@ docker-compose run --rm web ./yii migrate
 It may take some minutes to download the required docker images. When
 done, you can access the new app from [http://localhost:8080](http://localost:8080).
 
-> *Note:* On Windows and Mac OS you have to use [boot2docker](https://github.com/boot2docker/boot2docker).
-> There's also a [workaround](https://github.com/artsemis/docker-docker-compose) to make `docker-compose` available.
+> *Note:* If you don't have `composer` installed locally you can also use a docker container
+> to use composer:
+>
+> ```
+> docker run --rm -v /srv/projects:/var/www/html codemix/yii2-base:2.0.7-apache composer create-project --no-install codemix/yii2-dockerized myproject
+> ```
 
 Please check the [Wiki](https://github.com/codemix/yii2-dockerized/wiki) for full documentation.
