@@ -66,7 +66,10 @@ if (YII_ENV_DEV) {
         'allowedIPs' => ['*'],
     ];
     $config['bootstrap'][] = 'gii';
-    $config['modules']['gii'] = 'yii\gii\Module';
+    $config['modules']['gii'] = [
+        'class' => 'yii\gii\Module',
+        'allowedIPs' => ['*'],
+    ];
 }
 
 return $config;
