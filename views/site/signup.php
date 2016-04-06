@@ -17,12 +17,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row">
         <div class="col-lg-5">
             <?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
-                <?php /* Hack to prevent browsers from autofilling stored login passwords :(( */ ?>
-                <input name="foilautofill" style="display: none;" type="password" />
-
                 <?= $form->field($model, 'username') ?>
                 <?= $form->field($model, 'email') ?>
-                <?= $form->field($model, 'password')->passwordInput() ?>
+                <?= $form->field($model, 'password')->passwordInput(['autocomplete' => 'new-password']) ?>
                 <div class="form-group">
                     <?= Html::submitButton('Signup', ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>
                 </div>
