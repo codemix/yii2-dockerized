@@ -16,9 +16,9 @@ A template for Yii 2 applications based on the
 
 The `yii2-base` image comes in three flavours:
 
- * **Apache with PHP module** (based on `php:5.6.10-apache`)
- * **PHP-FPM** (based on `php:5.6.10-fpm`)
- * **HHVM** (based on `estebanmatias92/hhvm:3.7.0-fastcgi`)
+ * **Apache with PHP module** (based on `php:5.6.18-apache`)
+ * **PHP-FPM** (based on `php:5.6.18-fpm`)
+ * **HHVM** (based on `estebanmatias92/hhvm:3.8.1-fastcgi`)
 
 Quickstart
 -------------
@@ -43,7 +43,7 @@ done, you can access the new app from [http://localhost:8080](http://localost:80
 > to use composer:
 >
 > ```
-> docker run --rm -v /srv/projects:/var/www/html codemix/yii2-base:2.0.7-apache composer create-project --no-install codemix/yii2-dockerized myproject
+> docker run --rm -v /srv/projects:/var/www/html codemix/yii2-base:2.0.8-apache composer create-project --no-install codemix/yii2-dockerized myproject
 > ```
 
 Please check the [Wiki](https://github.com/codemix/yii2-dockerized/wiki) for full documentation.
