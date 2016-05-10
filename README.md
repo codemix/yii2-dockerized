@@ -16,8 +16,8 @@ A template for Yii 2 applications based on the
 
 The `yii2-base` image comes in three flavours:
 
- * **Apache with PHP module** (based on `php:5.6.18-apache`)
- * **PHP-FPM** (based on `php:5.6.18-fpm`)
+ * **Apache with PHP module** (based on `php:7.0.6-apache` or `php:5.6.18-apache`)
+ * **PHP-FPM** (based on `php:7.0.6-fpm` or `php:5.6.18-fpm`)
  * **HHVM** (based on `estebanmatias92/hhvm:3.8.1-fastcgi`)
 
 Quickstart
