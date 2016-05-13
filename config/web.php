@@ -6,6 +6,7 @@ $config = [
     'components' => [
         'cache' => [
             'class' => 'yii\caching\ApcCache',
+            'useApcu' => true,
         ],
         'db' => [
             'class' => 'yii\db\Connection',
