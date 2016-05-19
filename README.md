@@ -36,14 +36,22 @@ docker-compose up
 docker-compose run --rm web ./yii migrate
 ```
 
-It may take some minutes to download the required docker images. When
-done, you can access the new app from [http://localhost:8080](http://localost:8080).
-
-> *Note:* If you don't have `composer` installed locally you can also use a docker container
-> to use composer:
+> *Note:* If you don't have `composer` installed locally you can also use our docker image
+> to run composer:
 >
 > ```
 > docker run --rm -v /srv/projects:/var/www/html codemix/yii2-base:2.0.8-apache composer create-project --no-install codemix/yii2-dockerized myproject
 > ```
+
+It may take some minutes to download the required docker images. When
+done, you can access the new app from [http://localhost:8080](http://localost:8080).
+
+If you see an error about write permissions to `web/assets/` or `runtime/` it's because
+the local file owner id is different from `1000` which is the `www-data` user in the container.
+To fix this, try:
+
+```
+docker-compose run --rm web chown www-data web/assets runtime
+```
 
 Please check the [Wiki](https://github.com/codemix/yii2-dockerized/wiki) for full documentation.
