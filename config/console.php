@@ -15,6 +15,7 @@ return [
                     'class' => 'codemix\streamlog\Target',
                     'url' => 'php://stdout',
                     'levels' => ['info','trace'],
+                    'categories' => ['app\\*'],
                     'logVars' => [],
                 ],
                 [

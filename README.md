@@ -23,8 +23,8 @@ The `yii2-base` image comes in three flavours:
 Quickstart
 -------------
 
-You need to have [docker](http://www.docker.com) (>=1.5.0) and
-[docker-compose](https://docs.docker.com/compose/install/) installed.
+You need to have [docker](http://www.docker.com) (1.10.0+) and
+[docker-compose](https://docs.docker.com/compose/install/) (1.6.0+) installed.
 
 ```sh
 composer create-project --no-install codemix/yii2-dockerized myproject

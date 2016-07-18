@@ -1,62 +1,58 @@
-# For *-apache base image
-web:
-    build: ./
-    ports:
-        - "8080:80"
-    expose:
-        - "80"
-    volumes:
-        - ./:/var/www/html/
-    links:
-        - db
-    environment:
-        ENABLE_ENV_FILE: 1
-        ENABLE_LOCALCONF: 1
-        API_TOKEN: "<YOUR GITHUB API TOKEN>"
+version: '2'
+services:
 
-    # Uncomment to autostart at boottime
-    #restart: always
+    web:
+        build: ./
+        volumes:
+            - ./:/var/www/html/
+        links:
+            - db
+        environment:
+            ENABLE_ENV_FILE: 1
+            ENABLE_LOCALCONF: 1
+            API_TOKEN: "<YOUR GITHUB API TOKEN>"
 
-    # Uncomment to send log output to syslog
-    #log_driver: "syslog"
-    #log_opt:
-    #    tag: "docker-web"
 
-# for *-php-fpm and *-hhvm base image
-#app:
-#    build: ./
-#    expose:
-#        - "9000"
-#    volumes:
-#        - ./:/var/www/html/
-#    links:
-#        - db
-#    environment:
-#        ENABLE_ENV_FILE: 1
-#        ENABLE_LOCALCONF: 1
-#        API_TOKEN: "<YOUR GITHUB API TOKEN>"
-#
-#nginx:
-#    build: ./nginx
-#    ports:
-#        - "8080:80"
-#    links:
-#        - app
-#    volumes_from:
-#        - app
+        # For Apache based image:
+        ports:
+            - "8080:80"
 
-db:
-    image: mysql:5.6
-    ports:
-        - "3306:3306"
-    expose:
-        - "3306"
-    environment:
-        MYSQL_ROOT_PASSWORD: secret-root
-        MYSQL_DATABASE: web
-        MYSQL_USER: web
-        MYSQL_PASSWORD: web
+        # For FPM/HHVM based image:
+        #expose:
+        #    - "9000"
 
-    # Uncomment to autostart at boottime
-    #restart: always
+        # Autostart at boottime
+        #restart: always
+
+        # Send log output to syslog
+        #logging:
+        #    driver: "syslog"
+        #    options:
+        #        tag: "docker-web"
+
+    # For FPM/HHVM based image:
+    #nginx:
+    #    build: ./nginx
+    #    restart: always
+    #    ports:
+    #        - "8080:80"
+    #    links:
+    #        - web
+    #    volumes_from:
+    #        - web
+
+    db:
+        image: mysql:5.6
+        ports:
+            - "3306:3306"
+        expose:
+            - "3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: secret-root
+            MYSQL_DATABASE: web
+            MYSQL_USER: web
+            MYSQL_PASSWORD: web
+
+        # Autostart at boottime
+        #restart: always
 
