@@ -111,7 +111,7 @@ class User extends ActiveRecord implements IdentityInterface
         if ($insert) {
             try {
                 $params = Yii::$app->params;
-                Yii::$app->mail->compose('confirmEmail', ['user' => $this])
+                Yii::$app->mailer->compose('confirmEmail', ['user' => $this])
                     ->setFrom([$params['support.email'] => $params['support.name']])
                     ->setTo($this->email)
                     ->setSubject('Complete registration with ' . Yii::$app->name)
