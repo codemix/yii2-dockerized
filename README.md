@@ -40,7 +40,7 @@ docker-compose run --rm web ./yii migrate
 > to run composer:
 >
 > ```
-> docker run --rm -v /srv/projects:/var/www/html codemix/yii2-base:2.0.10-apache composer create-project --no-install codemix/yii2-dockerized myproject
+> docker run --rm -v /srv/projects:/var/www/html codemix/yii2-base:2.0.11-apache composer create-project --no-install codemix/yii2-dockerized myproject
 > ```
 
 It may take some minutes to download the required docker images. When
