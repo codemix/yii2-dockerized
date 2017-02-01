@@ -2,6 +2,7 @@
 $config = [
     'id' => 'basic',
     'basePath' => '/var/www/html',
+    'bootstrap' => ['log'],
     'vendorPath' => '/var/www/vendor',
     'components' => [
         'cache' => [
