@@ -4,8 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a716429822f7789fa007572f6da8d62d",
-    "content-hash": "9bce3daf2ccdc660d82b104001a16f33",
+    "content-hash": "26c700f4a52ddf9262ea608d8b09f353",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -285,7 +284,7 @@
                 "markdown",
                 "markdown-extra"
             ],
-            "time": "2016-09-14 20:40:20"
+            "time": "2016-09-14T20:40:20+00:00"
         },
         {
             "name": "codemix/yii2-streamlog",
@@ -324,7 +323,7 @@
                 "stream",
                 "yii2"
             ],
-            "time": "2017-01-28 08:01:44"
+            "time": "2017-01-28T08:01:44+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -368,7 +367,7 @@
             "keywords": [
                 "html"
             ],
-            "time": "2016-07-16 12:58:58"
+            "time": "2016-07-16T12:58:58+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -422,7 +421,7 @@
                 "mail",
                 "mailer"
             ],
-            "time": "2016-12-29 10:02:40"
+            "time": "2016-12-29T10:02:40+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
@@ -473,20 +472,20 @@
                 "env",
                 "environment"
             ],
-            "time": "2014-10-16 14:50:21"
+            "time": "2014-10-16T14:50:21+00:00"
         },
         {
             "name": "yiisoft/yii2",
-            "version": "2.0.11",
+            "version": "2.0.11.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-framework.git",
-                "reference": "4144506d84b5c895e026be4d79ebbef7067ebcd3"
+                "reference": "ee996adec1dfd7babb67bd0c604f5bd6425fe5ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/4144506d84b5c895e026be4d79ebbef7067ebcd3",
-                "reference": "4144506d84b5c895e026be4d79ebbef7067ebcd3",
+                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/ee996adec1dfd7babb67bd0c604f5bd6425fe5ab",
+                "reference": "ee996adec1dfd7babb67bd0c604f5bd6425fe5ab",
                 "shasum": ""
             },
             "require": {
@@ -573,7 +572,7 @@
                 "framework",
                 "yii2"
             ],
-            "time": "2017-02-01 16:46:29"
+            "time": "2017-02-08T09:04:32+00:00"
         },
         {
             "name": "yiisoft/yii2-bootstrap",
@@ -623,7 +622,7 @@
                 "bootstrap",
                 "yii2"
             ],
-            "time": "2016-03-17 03:29:28"
+            "time": "2016-03-17T03:29:28+00:00"
         },
         {
             "name": "yiisoft/yii2-composer",
@@ -673,7 +672,7 @@
                 "extension installer",
                 "yii2"
             ],
-            "time": "2016-12-20 13:26:02"
+            "time": "2016-12-20T13:26:02+00:00"
         },
         {
             "name": "yiisoft/yii2-jui",
@@ -723,7 +722,7 @@
                 "jQuery UI",
                 "yii2"
             ],
-            "time": "2016-07-22 22:26:59"
+            "time": "2016-07-22T22:26:59+00:00"
         },
         {
             "name": "yiisoft/yii2-swiftmailer",
@@ -773,7 +772,7 @@
                 "swiftmailer",
                 "yii2"
             ],
-            "time": "2016-09-09 11:48:11"
+            "time": "2016-09-09T11:48:11+00:00"
         }
     ],
     "packages-dev": [
@@ -850,7 +849,7 @@
                 "faker",
                 "fixtures"
             ],
-            "time": "2016-04-29 12:21:54"
+            "time": "2016-04-29T12:21:54+00:00"
         },
         {
             "name": "phpspec/php-diff",
@@ -888,7 +887,7 @@
                 }
             ],
             "description": "A comprehensive library for generating differences between two hashable objects (strings or arrays).",
-            "time": "2016-04-07 12:29:16"
+            "time": "2016-04-07T12:29:16+00:00"
         },
         {
             "name": "yiisoft/yii2-codeception",
@@ -933,7 +932,7 @@
                 "codeception",
                 "yii2"
             ],
-            "time": "2016-03-17 03:41:26"
+            "time": "2016-03-17T03:41:26+00:00"
         },
         {
             "name": "yiisoft/yii2-debug",
@@ -980,7 +979,7 @@
                 "debugger",
                 "yii2"
             ],
-            "time": "2016-11-24 09:42:29"
+            "time": "2016-11-24T09:42:29+00:00"
         },
         {
             "name": "yiisoft/yii2-faker",
@@ -1027,7 +1026,7 @@
                 "faker",
                 "yii2"
             ],
-            "time": "2015-03-01 06:22:44"
+            "time": "2015-03-01T06:22:44+00:00"
         },
         {
             "name": "yiisoft/yii2-gii",
@@ -1080,7 +1079,7 @@
                 "gii",
                 "yii2"
             ],
-            "time": "2016-03-18 14:09:46"
+            "time": "2016-03-18T14:09:46+00:00"
         }
     ],
     "aliases": [],
