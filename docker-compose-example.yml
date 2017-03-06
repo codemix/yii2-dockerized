@@ -1,58 +1,26 @@
-version: '2'
+version: '3'
 services:
 
     web:
-        build: ./
+        # Set this to the tag name of the base image in build/docker-compose.yml:
+        image: myapp-base:1.0
         volumes:
+            # During development we map the app code into the base container.
             - ./:/var/www/html/
+            # We also tweak Apache and PHP configurations.
+            - ./config/apache/local.conf:/etc/apache2/apache2.conf
+            - ./config/php/local.ini:/usr/local/etc/php/conf.d/local.ini
         links:
             - db
         environment:
             ENABLE_ENV_FILE: 1
-            ENABLE_LOCALCONF: 1
-            API_TOKEN: "<YOUR GITHUB API TOKEN>"
-
-
-        # For Apache based image:
         ports:
             - "8080:80"
 
-        # For FPM/HHVM based image:
-        #expose:
-        #    - "9000"
-
-        # Autostart at boottime
-        #restart: always
-
-        # Send log output to syslog
-        #logging:
-        #    driver: "syslog"
-        #    options:
-        #        tag: "docker-web"
-
-    # For FPM/HHVM based image:
-    #nginx:
-    #    build: ./nginx
-    #    restart: always
-    #    ports:
-    #        - "8080:80"
-    #    links:
-    #        - web
-    #    volumes_from:
-    #        - web
-
     db:
-        image: mysql:5.6
-        ports:
-            - "3306:3306"
-        expose:
-            - "3306"
+        image: mysql
         environment:
-            MYSQL_ROOT_PASSWORD: secret-root
+            MYSQL_ROOT_PASSWORD: root
             MYSQL_DATABASE: web
             MYSQL_USER: web
             MYSQL_PASSWORD: web
-
-        # Autostart at boottime
-        #restart: always
-

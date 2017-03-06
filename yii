@@ -1,14 +1,16 @@
 #!/usr/bin/env php
 <?php
+use codemix\yii2confload\Config;
+
+require('/var/www/vendor/autoload.php');
 
 // fcgi doesn't have STDIN and STDOUT defined by default
 defined('STDIN') or define('STDIN', fopen('php://stdin', 'r'));
 defined('STDOUT') or define('STDOUT', fopen('php://stdout', 'w'));
 
-require('/var/www/html/helpers/DockerEnv.php');
-\DockerEnv::init();
-$config = \DockerEnv::consoleConfig();
+// Init configuration and load Yii bootstrap file
+$config = Config::bootstrap('/var/www/html');
 
-$application = new yii\console\Application($config);
-$exitCode = $application->run();
-exit($exitCode);
+$application = Yii::createObject('yii\console\Application', [$config->console()]);
+
+exit($application->run());

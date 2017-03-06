@@ -1,3 +1,4 @@
+build/vendor/
 config/local.php
 config/console-local.php
 /docker-compose.yml

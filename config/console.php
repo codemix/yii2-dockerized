@@ -1,8 +1,10 @@
 <?php
-/* @var array() $web the web configuration */
-$web = self::webConfig();
+/* @var codemix\yii2confload\Config $this */
+
+$web = $this->web();
 return [
     'id' => $web['id'],
+    'aliases' => $web['aliases'],
     'basePath' => $web['basePath'],
     'vendorPath' => $web['vendorPath'],
     'bootstrap' => ['log'],

@@ -1,6 +1,11 @@
 <?php
+/* @var codemix\yii2confload\Config $this */
 $config = [
     'id' => 'basic',
+    'aliases' => [
+        '@bower' => '@vendor/bower-asset',
+        '@npm' => '@vendor/npm-asset',
+    ],
     'basePath' => '/var/www/html',
     'bootstrap' => ['log'],
     'vendorPath' => '/var/www/vendor',
@@ -11,9 +16,9 @@ $config = [
         ],
         'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => \DockerEnv::dbDsn(),
-            'username' => \DockerEnv::dbUser(),
-            'password' => \DockerEnv::dbPassword(),
+            'dsn' => self::env('DB_DSN', 'mysql:host=db;dbname=web'),
+            'username' => self::env('DB_USER', 'web'),
+            'password' => self::env('DB_PASSWORD', 'web'),
             'charset' => 'utf8',
             'tablePrefix' => '',
         ],
@@ -24,13 +29,13 @@ $config = [
             'class' => 'yii\swiftmailer\Mailer',
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
-                'host' => \DockerEnv::get('SMTP_HOST'),
-                'username' => \DockerEnv::get('SMTP_USER'),
-                'password' => \DockerEnv::get('SMTP_PASSWORD'),
+                'host' => self::env('SMTP_HOST'),
+                'username' => self::env('SMTP_USER'),
+                'password' => self::env('SMTP_PASSWORD'),
             ],
         ],
         'log' => [
-            'traceLevel' => \DockerEnv::get('YII_TRACELEVEL', 0),
+            'traceLevel' => self::env('YII_TRACELEVEL', 0),
             'targets' => [
                 [
                     'class' => 'codemix\streamlog\Target',
@@ -47,7 +52,7 @@ $config = [
             ],
         ],
         'request' => [
-            'cookieValidationKey' => \DockerEnv::get('COOKIE_VALIDATION_KEY', null, !YII_ENV_TEST),
+            'cookieValidationKey' => self::env('COOKIE_VALIDATION_KEY', null, !YII_ENV_TEST),
         ],
         'urlManager' => [
             'enablePrettyUrl' => true,

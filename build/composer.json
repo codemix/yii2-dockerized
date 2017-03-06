@@ -9,25 +9,23 @@
 		"php": ">=5.4.0",
 		"yiisoft/yii2": "2.0.13",
 		"yiisoft/yii2-bootstrap": "~2.0.0",
-		"yiisoft/yii2-jui": "~2.0.0",
 		"yiisoft/yii2-swiftmailer": "~2.0.0",
 		"vlucas/phpdotenv": "1.0.*",
-		"codemix/yii2-streamlog": "1.1.0"
+		"codemix/yii2-configloader": "0.9.0",
+		"codemix/yii2-streamlog": "~1.1.0"
 	},
 	"require-dev": {
 		"yiisoft/yii2-debug": "~2.0.0",
-		"yiisoft/yii2-gii": "~2.0.0",
-		"yiisoft/yii2-codeception": "~2.0.0",
-		"yiisoft/yii2-faker": "~2.0.0"
+		"yiisoft/yii2-gii": "~2.0.0"
 	},
 	"config": {
 		"process-timeout": 1800,
 		"vendor-dir": "/var/www/vendor"
 	},
-	"extra": {
-		"asset-installer-paths": {
-			"npm-asset-library": "/var/www/vendor/npm",
-			"bower-asset-library": "/var/www/vendor/bower"
+	"repositories": [
+		{
+			"type": "composer",
+			"url": "https://asset-packagist.org"
 		}
-	}
+	]
 }
