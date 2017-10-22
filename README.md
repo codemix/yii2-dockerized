@@ -44,7 +44,7 @@ docker-compose run --rm web ./yii migrate
 > ```
 
 It may take some minutes to download the required docker images. When
-done, you can access the new app from [http://localhost:8080](http://localost:8080).
+done, you can access the new app from [http://localhost:8080](http://localhost:8080).
 
 If you see an error about write permissions to `web/assets/` or `runtime/` it's because
 the local file owner id is different from `1000` which is the `www-data` user in the container.
