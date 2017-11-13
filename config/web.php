@@ -75,11 +75,12 @@ $config = [
         'user' => [
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
+            'loginUrl' => ['user/login'],
         ],
     ],
     'params' => [
-        'support.email' => 'webmaster@example.com',
-        'support.name' => 'My Support',
+        'mail.from' => ['no-reply@example.com' => 'My Application'],
+        'mail.catchAll' => self::env('MAIL_CATCHALL', null),
 
         'user.passwordResetTokenExpire' => 3600,
         'user.emailConfirmationTokenExpire' => 43200, // 5 days

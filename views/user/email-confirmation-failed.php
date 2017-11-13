@@ -11,8 +11,7 @@ $params = Yii::$app->params;
 <div class="site-signup alert alert-danger">
     <h1>Could not complete registration</h1>
 
-    <p>You either supplied an invalid confirmation link or the link has meanwhile expired.
-    Please contact our support under <?= Html::mailTo($params['support.name'], $params['support.email']) ?>.
+    <p>You either supplied an invalid confirmation link or the link has meanwhile expired.</p>
     </p>
 
 </div>

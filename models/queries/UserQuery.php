@@ -7,7 +7,7 @@ use app\models\User;
 class UserQuery extends ActiveQuery
 {
     /**
-     * @return UserQuery the query with conditions for users that can login applied
+     * @return static the query with conditions for users that can login applied
      */
     public function canLogin()
     {
@@ -18,7 +18,7 @@ class UserQuery extends ActiveQuery
     }
 
     /**
-     * @return UserQuery the query with condition for given email applied
+     * @return static the query with condition for given email applied
      */
     public function email($email)
     {
@@ -26,7 +26,7 @@ class UserQuery extends ActiveQuery
     }
 
     /**
-     * @return UserQuery the query with condition for given username applied
+     * @return static the query with condition for given username applied
      */
     public function username($username)
     {
@@ -35,7 +35,7 @@ class UserQuery extends ActiveQuery
 
     /**
      * @param string $token the password reset token
-     * @return UserQuery the query with conditions for valid password reset token applied
+     * @return static the query with conditions for valid password reset token applied
      */
     public function passwordResetToken($token)
     {
@@ -51,7 +51,7 @@ class UserQuery extends ActiveQuery
 
     /**
      * @param string $token the email confirmation token
-     * @return UserQuery the query with conditions for valid email confirmation token applied
+     * @return static the query with conditions for valid email confirmation token applied
      */
     public function emailConfirmationToken($token)
     {

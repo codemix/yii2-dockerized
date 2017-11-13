@@ -48,36 +48,17 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * @inheritdoc
      */
-    public function scenarios()
-    {
-        return array_merge(parent::scenarios(), [
-            'signup' => ['username','email','password'],
-        ]);
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function rules()
     {
         return [
-            [['username','email','password'], 'required', 'on'=>'signup'],
-
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
 
             ['role', 'default', 'value' => self::ROLE_USER],
             ['role', 'in', 'range' => [self::ROLE_USER]],
-
-            ['username', 'filter', 'filter' => 'trim'],
-            ['username', 'unique'],
-            ['username', 'string', 'min' => 2, 'max' => 255],
-
-            ['email', 'filter', 'filter' => 'trim'],
-            ['email', 'email'],
-            ['email', 'unique'],
         ];
     }
+
     /**
      * @inheritdoc
      */
@@ -175,7 +156,8 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Generates password hash from password and sets it to the model
+     * Sets a new password or keeps the old password if the provided password
+     * is empty.
      *
      * @param string $password
      */

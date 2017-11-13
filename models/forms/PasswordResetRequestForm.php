@@ -4,6 +4,7 @@ namespace app\models\forms;
 use Yii;
 use yii\base\Model;
 use app\models\User;
+use app\helpers\Mail;
 
 /**
  * Password reset request form
@@ -32,22 +33,25 @@ class PasswordResetRequestForm extends Model
     /**
      * Sends an email with a link, for resetting the password.
      *
-     * @return boolean whether the email was send
+     * @return bool whether the email was sent
      */
     public function sendEmail()
     {
-        /** @var User $user */
-        $user = User::find()->canLogin()->email($this->email)->one();
-
-        if ($user && $user->generatePasswordResetToken(true)) {
-            $params = Yii::$app->params;
-            return Yii::$app->mailer->compose('passwordResetToken', ['user' => $user])
-                ->setFrom([$params['support.email'] => $params['support.name']])
-                ->setTo($this->email)
-                ->setSubject('Password reset for ' . Yii::$app->name)
-                ->send();
+        if (!$this->validate()) {
+            return false;
         }
 
+        /** @var User $user */
+        $user = User::find()
+            ->canLogin()
+            ->email($this->email)
+            ->one();
+
+        if ($user && $user->generatePasswordResetToken(true) && Mail::toUser($user, 'reset-password')) {
+            return true;
+        }
+
+        $this->addError('email', 'We can not reset the password for this user');
         return false;
     }
 }
