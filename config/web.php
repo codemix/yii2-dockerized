@@ -9,6 +9,7 @@ $config = [
     'basePath' => '/var/www/html',
     'bootstrap' => ['log'],
     'vendorPath' => '/var/www/vendor',
+    'catchAll' => self::env('MAINTENANCE', false) ? ['site/maintenance'] : null,
     'components' => [
         'db' => [
             'class' => 'yii\db\Connection',

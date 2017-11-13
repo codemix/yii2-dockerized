@@ -170,4 +170,17 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
+
+    /**
+     * @return string|\yii\web\Response the maintenance page or a redirect
+     * response if not in maintenance mode
+     */
+    public function actionMaintenance()
+    {
+        if (empty(Yii::$app->catchAll)) {
+            return $this->redirect(Yii::$app->homeUrl);
+        }
+        Yii::$app->response->statusCode = 503;
+        return $this->render('maintenance');
+    }
 }
