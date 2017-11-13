@@ -10,10 +10,6 @@ $config = [
     'bootstrap' => ['log'],
     'vendorPath' => '/var/www/vendor',
     'components' => [
-        'cache' => [
-            'class' => 'yii\caching\ApcCache',
-            'useApcu' => true,
-        ],
         'db' => [
             'class' => 'yii\db\Connection',
             'dsn' => self::env('DB_DSN', 'mysql:host=db;dbname=web'),
@@ -22,6 +18,16 @@ $config = [
             'charset' => 'utf8',
             'tablePrefix' => '',
         ],
+        'cache' => [
+            'class' => 'yii\caching\ApcCache',
+            'useApcu' => true,
+        ],
+        'cache' => self::env('DISABLE_CACHE', false) ?
+            'yii\caching\DummyCache' :
+            [
+                'class' => 'yii\caching\ApcCache',
+                'useApcu' => true,
+            ],
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
