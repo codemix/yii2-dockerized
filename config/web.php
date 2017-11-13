@@ -54,6 +54,11 @@ $config = [
         'request' => [
             'cookieValidationKey' => self::env('COOKIE_VALIDATION_KEY', null, !YII_ENV_TEST),
         ],
+        'session' => [
+            'name' => 'MYAPPSID',
+            'savePath' => '@app/var/sessions',
+            'timeout' => 1440,
+        ],
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
