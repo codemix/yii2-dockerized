@@ -75,7 +75,13 @@ $config = [
             'enableAutoLogin' => true,
         ],
     ],
-    'params' => require('/var/www/html/config/params.php'),
+    'params' => [
+        'support.email' => 'webmaster@example.com',
+        'support.name' => 'My Support',
+
+        'user.passwordResetTokenExpire' => 3600,
+        'user.emailConfirmationTokenExpire' => 43200, // 5 days
+    ],
 ];
 
 if (YII_ENV_DEV) {
