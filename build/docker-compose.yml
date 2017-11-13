@@ -9,7 +9,7 @@ services:
     #
     base:
         # Specify a tag name for your base image here:
-        image: myapp-base:1.0
+        image: yii2-base-myapp:1.0
         build: ./
 
     # The composer container to manage composer packages for the build process

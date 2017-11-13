@@ -2,7 +2,7 @@
 # It's not used for local development.
 
 # Set this to the version of your base image
-FROM myapp-base:1.0
+FROM yii2-base-myapp:1.0
 
 # Copy apache and PHP configuration for production into the image
 COPY ./config/apache/productive.conf /etc/apache2/apache2.conf

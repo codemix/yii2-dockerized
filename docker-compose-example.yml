@@ -3,7 +3,7 @@ services:
 
     web:
         # Set this to the tag name of the base image in build/docker-compose.yml:
-        image: myapp-base:1.0
+        image: yii2-base-myapp:1.0
         volumes:
             # During development we map the app code into the base container.
             - ./:/var/www/html/
