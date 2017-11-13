@@ -39,6 +39,8 @@ $config = [
                 'host' => self::env('SMTP_HOST'),
                 'username' => self::env('SMTP_USER'),
                 'password' => self::env('SMTP_PASSWORD'),
+                'port' => self::env('SMTP_PORT', 25),
+                'encryption' => self::env('SMTP_ENCRYPTION', null),
             ],
         ],
         'log' => [
