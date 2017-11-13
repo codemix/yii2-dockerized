@@ -79,11 +79,13 @@ $config = [
 ];
 
 if (YII_ENV_DEV) {
-    $config['bootstrap'][] = 'debug';
+    // Debug must be loaded first to let it grab early log messages
+    array_unshift($config['bootstrap'], 'debug');
     $config['modules']['debug'] = [
         'class' => 'yii\debug\Module',
         'allowedIPs' => ['*'],
     ];
+
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
