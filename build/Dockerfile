@@ -1,8 +1,20 @@
-# The base image that provides the PHP runtime and composer packages
-# which are requried by the application. You should use docker-compose
-# to build/update the image
+# Application base image
+#
+# This image contains:
+#
+#  - PHP runtime
+#  - PHP extensions
+#  - Composer packages
 
-# Specific version constraint is recommended
+
+# Build stage to install composer packages
+FROM composer AS vendor
+COPY composer.json /app
+COPY composer.lock /app
+RUN ["composer", "install"]
+
+
+# Build stage of the final image
 FROM php:7.1.11-apache
 
 # Set up PHP environment
@@ -17,7 +29,6 @@ RUN apt-get update \
 
     # Extensions required by yii2
     && docker-php-ext-install intl \
-    && docker-php-ext-install mbstring \
 
     # Optional extensions (modify as needed)
     && docker-php-ext-install pdo_mysql \
@@ -30,6 +41,6 @@ RUN apt-get update \
     && apt-get autoremove -y \
     && rm -r /var/lib/apt/lists/*
 
-COPY vendor /var/www/vendor
+COPY --from=vendor /var/www/vendor /var/www/vendor
 
 WORKDIR /var/www/html

@@ -17,30 +17,38 @@ A template for docker based Yii 2 applications.
 ## 1.1 Base Image
 
 The core idea of this template is that you build a bespoke docker base image
-for your application wich exactly meets your project's requirements. We
-therefore use a dedicated configuration in `./build/Dockerfile`. This image
-will never change unless
+for your application that meets your project's exact requirements. This image
+contains:
 
- * you want to upgrade to a newer Yii version or
+ * PHP runtime environment (e.g. Apache + PHP module)
+ * PHP extensions
+ * Composer packages
+
+This image will hardly ever change unless
+
+ * you want to upgrade to a newer PHP or Yii version or
  * you want to add a missing PHP extension or composer package.
 
-The actual application image will extend from this base and use the Dockerfile
-in `./Dockerfile`.
+Its configuration can be found in the `./build` directory:
 
-In the recommended scenario you would build the base image, upload it to your
-own container registry and, reference it in the app's main `./Dockerfile`. This
-way all your coworkers will always share the same base image.
+ * `Dockerfile` adds PHP extensions and required system packages
+ * `composer.json` and `composer.lock` list composer packages
 
-If you don't have a container registry you can still use the template. But then
+The actual production image extends from this base image and uses `./Dockerfile`.
+It only adds your your app sources on top.
+
+In the recommended scenario you would build the base image once then upload
+it to your container registry and share it with your co-developers.
+
+If you don't have a container registry you can still use our template. But then
 each developer in your team will have to build the same base image locally.
 
-## 1.2 Configuration with Environment Variables
+## 1.2 Runtime Configuration via Environment Variables
 
 We follow docker's principle that containers are configured via environment
-variables. This does not include each and every part of the application
-configuration of course: Most settings will be hardcoded in `./config/web.php`,
-for example URL rules. But the variable runtime parameters like DB credentials
-or whether to enable debug mode will be configurable via environment variables.
+variables. This only includes runtime configuration, of course: Things like
+whether to run in debug mode or DB credentials. Most other settings like for
+example URL rules will be hardcoded in `./config/web.php`.
 
 You should continue to follow this principle when developing your app. For
 more details also see our
@@ -50,6 +58,8 @@ in this template.
 
 # 2 Initial Project Setup
 
+## 2.1 Download Application Template
+
 First fetch a copy of our application template, for example with composer:
 
 ```sh
@@ -58,50 +68,54 @@ composer create-project --no-install codemix/yii2-dockerized myproject
 
 You could also just download the files as ZIP from GitHub.
 
+## 2.2 Update/Add Composer Packages
 
-## 2.1 Preparing Composer Directory
-
-When we later build the application base image the contents of `./build/vendor`
-will be copied there. So we first need to install all required composer
-packages there.
-
-To do so you can use the [composer](https://hub.docker.com/r/library/composer/)
-container:
+Go the `./build` directory of the app:
 
 ```sh
 cd myproject/base
-docker-compose run --rm composer install
 ```
 
-If you want to upgrade all packages to latest versions you could also run `...
-composer update` instead. You can now also add more packages that your
-application depends on:
+Your app may need some additional composer packages besides yii2. We use a
+composer container that is based on the official
+[composer](https://hub.docker.com/r/library/composer/) image to add them:
+
 
 ```sh
-docker-compose run --rm composer require some/package
+docker-compose run --rm composer require some/library
 ```
 
-> **Note:** As docker's composer image may not meet the PHP requirements of
-> all your packages you may have to add `--ignore-platform-reqs` to be able to
+> **Note:** As docker's composer image may not meet the PHP requirements of all
+> your packages you may have to add `--ignore-platform-reqs` to be able to
 > install some packages.
 
-## 2.2 Building the Base Image
+This will update `composer.json` and `composer.lock` respectively.
+
+You can also run other composer commands, of course. For example if you want to
+update all packages listed in `composer.json` to the latest (constrained)
+versions, run:
+
+```sh
+docker-compose run --rm composer update
+```
+
+## 2.3 Build the Base Image
 
 Before you continue with building the base image you should:
 
- * Set a name for the base image in `./build/docker-compose.yml`
- * Optionally add more PHP extensions in `./build/Dockerfile`
+ * Set a tag name for the base image in `./build/docker-compose.yml`
+ * Use the same tag name in `./docker-compose.yml`
+ * Optionally add more PHP extensions or system packages in `./build/Dockerfile`
 
-Building the image is straightforward:
+Building the image is straightforward. Again from the `./build` directory run:
 
 ```sh
-cd myproject/base
 docker-compose build
 ```
 
-Now you could upload that image to your container registry.
+Now you can upload that image to your container registry.
 
-## 2.3 Cleanup and Initial Commit
+## 2.4 Cleanup and Initial Commit
 
 At this point you may want to modify our application template, add some default
 configuration and remove those parts that you don't need. Afterwards you are
@@ -110,13 +124,13 @@ ready for the initial commit to your project repository.
 
 # 3 Local Development
 
-During development we map the local app directory into the app container so
-that we always run the code that we currently work on. The app container will
-use the base image we built before.
+During development we map the local app directory into an container that uses
+our base image. This way we always run the code that we currently work on.
 
-As local environments may differ (e.g. use different docker network settings)
-we usually keep `docker-compose.yml` out of version control. Instead we provide
-a `docker-compose-example.yml` with a reasonable example setup.
+As your local docker setup may differ from production (e.g. use different
+docker network settings) we usually keep `docker-compose.yml` out of version
+control. Instead we provide a `docker-compose-example.yml` with a reasonable
+example setup.
 
 Since the runtime configuration should happen with environment variables, we
 use a `.env` file. We also keep this out of version control and only include a
@@ -132,17 +146,17 @@ cp docker-compose-example.yml docker-compose.yml
 cp .env-example .env
 ```
 
-You should modify those two files e.g. to enable debug mode or configure a
+You should modify these two files e.g. to enable debug mode or configure a
 database. Then you should be ready to start your container and initialize
 your database (if your project has one):
 
 ```sh
 docker-compose up -d
+# Wait some seconds to let the DB container fire up ...
 docker-compose exec web ./yii migrate
 ```
 
-It may take some minutes to download the required docker images before you can
-issue the second command. When done, you can access the new app from
+When done, you can access the new app from
 [http://localhost:8080](http://localhost:8080).
 
 If you see an error about write permissions to `web/assets/`, `runtime/` or
@@ -152,7 +166,7 @@ which is the `www-data` user inside the container.
 To fix this, run:
 
 ```
-docker-compose exec chown www-data web/assets runtime var/sessions
+docker-compose exec web chown www-data web/assets runtime var/sessions
 ```
 
 ## 3.2 Development Session
@@ -160,12 +174,10 @@ docker-compose exec chown www-data web/assets runtime var/sessions
 A development session will then usually go like this:
 
 ```sh
-git pull --ff-only
 docker-compose up -d
 # edit files, check, tests, ...
 git add .
 git commit -m 'Implemented stuff'
-git push origin my-branch
 docker-compose stop
 ```
 
@@ -179,12 +191,15 @@ docker-compose exec web ./yiic migrate/create add_column_name
 ```
 
 > **Note:** You may have to change ownership for files that where created from
-> inside the container if you want to write to them on the host system.
+> inside the container if you want to write to them on the host system:
+>
+>     chown -R mike migrations/*
+>
 
 ### 3.2.2 Adding or Updating Composer Packages
 
 Whenever you add new composer packages this requires a rebuild of the base
-image. The procedure for this is the same as described in 2.1 and 2.2.
+image. The procedure for this is the same as described in 2.2 and 2.3.
 
 ### 3.2.3 Working with Complex Local Configuration
 

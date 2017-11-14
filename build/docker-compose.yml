@@ -1,19 +1,20 @@
 version: '3'
 services:
 
-    # The base image that provides the PHP runtime and composer packages
-    # which are requried by the application. To (re-)build the image use:
+    # Application base image
     #
-    #  docker-compose run --rm composer install
-    #  docker-compose build
+    # This image contains:
+    #
+    #  - PHP runtime
+    #  - PHP extensions
+    #  - Composer packages
     #
     base:
         # Specify a tag name for your base image here:
         image: yii2-base-myapp:1.0
         build: ./
 
-    # The composer container to manage composer packages for the build process
-    # in ./vendor.
+    # Composer utilty to manage composer packages
     #
     # You will usually only ever run one of these commands:
     #
@@ -26,5 +27,4 @@ services:
         image: composer
         volumes:
             - ./:/app
-            - ./:/var/www
         entrypoint: composer
