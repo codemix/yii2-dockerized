@@ -6,3 +6,4 @@ config/console-local.php
 runtime/
 web/assets/
 vendor/
+var/
