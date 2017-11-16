@@ -60,13 +60,14 @@ in this template.
 
 ## 2.1 Download Application Template
 
-First fetch a copy of our application template, for example with composer:
+First fetch a copy of our application template, for example with git:
 
 ```sh
-composer create-project --no-install codemix/yii2-dockerized myproject
+git clone https://github.com/codemix/yii2-dockerized.git myproject
+rm -rf myproject/.git
 ```
 
-You could also just download the files as ZIP from GitHub.
+You could also download the files as ZIP archive from GitHub.
 
 ## 2.2 Update/Add Composer Packages
 
