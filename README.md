@@ -1,9 +1,6 @@
 Yii 2 Dockerized
 ================
 
-[![Latest Stable Version](https://poser.pugx.org/codemix/yii2-dockerized/v/stable.svg)](https://packagist.org/packages/codemix/yii2-dockerized)
-[![Total Downloads](https://poser.pugx.org/codemix/yii2-dockerized/downloads.svg)](https://packagist.org/packages/codemix/yii2-dockerized)
-
 A template for docker based Yii 2 applications.
 
  * Ephemeral container, configured via environment variables
