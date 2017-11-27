@@ -68,10 +68,10 @@ You could also download the files as ZIP archive from GitHub.
 
 ## 2.2 Update/Add Composer Packages
 
-Go the `./build` directory of the app:
+Go to the `./build` directory of the app:
 
 ```sh
-cd myproject/base
+cd myproject/build
 ```
 
 Your app may need some additional composer packages besides yii2. We use a
