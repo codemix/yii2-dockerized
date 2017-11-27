@@ -7,6 +7,7 @@ use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use app\models\behaviors\TimestampBehavior;
 use app\models\queries\UserQuery;
+use app\helpers\Mail;
 
 /**
  * User model
@@ -89,17 +90,8 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function afterSave($insert, $changedAttributes)
     {
-        if ($insert) {
-            try {
-                $params = Yii::$app->params;
-                Yii::$app->mailer->compose('confirmEmail', ['user' => $this])
-                    ->setFrom([$params['support.email'] => $params['support.name']])
-                    ->setTo($this->email)
-                    ->setSubject('Complete registration with ' . Yii::$app->name)
-                    ->send();
-            } catch(\Exception $e) {
-                Yii::warning('Failed to send confirmation email to new user. No SMTP server configured?','app\models\User');
-            }
+        if ($insert && !Mail::toUser($this, 'confirm-email')) {
+            Yii::warning('Failed to send confirmation email to new user.', __METHOD__);
         }
         parent::afterSave($insert, $changedAttributes);
     }
