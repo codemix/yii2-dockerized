@@ -13,7 +13,7 @@ A template for docker based Yii 2 applications.
 
 ## 1.1 Base Image
 
-The core idea of this template is that you build a bespoke docker base image
+The core idea of this template is that you build a bespoke **base image**
 for your application that meets your project's exact requirements. This image
 contains:
 
@@ -21,7 +21,7 @@ contains:
  * PHP extensions
  * Composer packages
 
-This image will hardly ever change unless
+The base image will hardly ever change unless
 
  * you want to upgrade to a newer PHP or Yii version or
  * you want to add a missing PHP extension or composer package.
@@ -31,8 +31,8 @@ Its configuration can be found in the `./build` directory:
  * `Dockerfile` adds PHP extensions and required system packages
  * `composer.json` and `composer.lock` list composer packages
 
-The actual app image extends from this base image and uses `./Dockerfile` in
-the main directory. It basically only adds your your app sources on top.
+The actual **app image** extends from this base image and uses `./Dockerfile`
+in the main directory. It basically only adds your app sources on top.
 
 In the recommended scenario you would build the base image once then upload
 it to your container registry and share it with your co-developers.
@@ -91,10 +91,11 @@ To update all packages run:
 docker-compose run --rm composer update
 ```
 
-This will update `composer.json` and `composer.lock` respectively. You have to
-rebuild your base image afterwards (see below).
+This will update `composer.json` and `composer.lock` respectively. You can
+also run other composer commands, of course.
 
-You can also run other composer commands, of course.
+**You have to rebuild your base image afterwards** (see below).
+
 
 > **Note:** As docker's composer image may not meet the PHP requirements of all
 > your packages you may have to add `--ignore-platform-reqs` to be able to
