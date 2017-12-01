@@ -2,14 +2,22 @@ version: '3'
 services:
 
     web:
-        # Set this to the tag name of the base image in build/docker-compose.yml:
-        image: yii2-base-myapp:1.0
+        build: ./
+
+        # During development we map local files into the container
         volumes:
-            # During development we map the app code into the base container.
+            # Map current working copy into the container
             - ./:/var/www/html/
-            # We also tweak Apache and PHP configurations.
-            - ./config/apache/local.conf:/etc/apache2/apache2.conf
-            - ./config/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+
+            # Uncomment to use dev specific Apache or PHP configurations
+            #- ./config/apache/local.conf:/etc/apache2/apache2.conf
+            #- ./config/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+
+            # Uncomment to use the local vendor directory, e.g. for debugging.
+            # This requires that you have copied the directory to your host with
+            #   docker-compose run --rm web cp -ra /var/www/vendor .
+            #- ./vendor:/var/www/vendor
+
         links:
             - db
         environment:

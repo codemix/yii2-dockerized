@@ -1,8 +1,8 @@
 # Application image
 #
-# This image adds the application source to the bas image
+# This image mainly adds the latest application source to the base image
 #
-FROM yii2-base-myapp:1.0
+FROM myregistry.example.com/me/myapp:base-1.0
 
 # Copy apache and PHP configuration for production into the image
 COPY ./config/apache/productive.conf /etc/apache2/apache2.conf

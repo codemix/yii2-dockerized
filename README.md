@@ -31,8 +31,8 @@ Its configuration can be found in the `./build` directory:
  * `Dockerfile` adds PHP extensions and required system packages
  * `composer.json` and `composer.lock` list composer packages
 
-The actual production image extends from this base image and uses `./Dockerfile`.
-It only adds your your app sources on top.
+The actual app image extends from this base image and uses `./Dockerfile` in
+the main directory. It basically only adds your your app sources on top.
 
 In the recommended scenario you would build the base image once then upload
 it to your container registry and share it with your co-developers.
@@ -68,50 +68,54 @@ You could also download the files as ZIP archive from GitHub.
 
 ## 2.2 Update/Add Composer Packages
 
-Go to the `./build` directory of the app:
+We use a composer container that is based on the official
+[composer](https://hub.docker.com/r/library/composer/) image.
+
+If your app needs some additional composer packages besides yii2 or
+if you want to update composer packages, go to the `./build` directory
+of the app:
 
 ```sh
 cd myproject/build
 ```
 
-Your app may need some additional composer packages besides yii2. We use a
-composer container that is based on the official
-[composer](https://hub.docker.com/r/library/composer/) image to add them:
-
+To add a package run:
 
 ```sh
 docker-compose run --rm composer require some/library
 ```
 
-> **Note:** As docker's composer image may not meet the PHP requirements of all
-> your packages you may have to add `--ignore-platform-reqs` to be able to
-> install some packages.
-
-This will update `composer.json` and `composer.lock` respectively.
-
-You can also run other composer commands, of course. For example if you want to
-update all packages listed in `composer.json` to the latest (constrained)
-versions, run:
+To update all packages run:
 
 ```sh
 docker-compose run --rm composer update
 ```
+
+This will update `composer.json` and `composer.lock` respectively. You have to
+rebuild your base image afterwards (see below).
+
+You can also run other composer commands, of course.
+
+> **Note:** As docker's composer image may not meet the PHP requirements of all
+> your packages you may have to add `--ignore-platform-reqs` to be able to
+> install some packages.
+
 
 ## 2.3 Build the Base Image
 
 Before you continue with building the base image you should:
 
  * Set a tag name for the base image in `./build/docker-compose.yml`
- * Use the same tag name in `./docker-compose.yml`
+ * Use the same tag name in `./Dockerfile` in the main directory
  * Optionally add more PHP extensions or system packages in `./build/Dockerfile`
 
-Building the image is straightforward. Again from the `./build` directory run:
+To build the base image, again go to the `./build` directory and run:
 
 ```sh
 docker-compose build
 ```
 
-Now you can upload that image to your container registry.
+Now you could upload that image to your container registry.
 
 ## 2.4 Cleanup and Initial Commit
 
@@ -122,8 +126,8 @@ ready for the initial commit to your project repository.
 
 # 3 Local Development
 
-During development we map the local app directory into an container that uses
-our base image. This way we always run the code that we currently work on.
+During development we map the local app directory into the app image.
+This way we always run the code that we currently work on.
 
 As your local docker setup may differ from production (e.g. use different
 docker network settings) we usually keep `docker-compose.yml` out of version
@@ -181,8 +185,8 @@ docker-compose stop
 
 ### 3.2.1 Running yiic Commands
 
-If you need to run yiic commands you simply execute them in the running
-development container:
+If you need to run yiic commands you execute them in the running development
+container:
 
 ```sh
 docker-compose exec web ./yiic migrate/create add_column_name
@@ -222,4 +226,4 @@ docker-compose exec web cp -rf /var/www/vendor ./
 
 > **Note:** Inside the container composer packages live in `/var/www/vendor`
 > instead of the app's `./vendor` directory. This way we don't override the
-> vendor directory when we map the app directory into the container.
+> vendor directory when we map the local app directory into the container.
