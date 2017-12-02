@@ -162,19 +162,18 @@ docker-compose exec web ./yii migrate
 When done, you can access the new app from
 [http://localhost:8080](http://localhost:8080).
 
-If you see an error about write permissions to `web/assets/`, `runtime/` or
-`var/sessions` it's because the local file owner id is different from `1000`
-which is the `www-data` user inside the container.
-
-To fix this, run:
-
-```
-docker-compose exec web chown www-data web/assets runtime var/sessions
-```
+> **Note:** If you see an error about write permissions to `web/assets/`,
+> `runtime/` or `var/sessions` it's because the local file owner id is
+> different from `1000` which is the `www-data` user inside the container.
+>
+> To fix this, run:
+>
+>     docker-compose exec web chown www-data web/assets runtime var/sessions
+>
 
 ## 3.2 Development Session
 
-A development session will then usually go like this:
+A development session will usually go like this:
 
 ```sh
 docker-compose up -d
@@ -183,6 +182,14 @@ git add .
 git commit -m 'Implemented stuff'
 docker-compose stop
 ```
+
+> **Note:** Another approach is to leave a terminal window open and start the
+> container with
+>
+>     docker-compose up
+>
+> This way you can always follow the live logs of your container. To stop all
+> containers, press `Ctrl-c`.
 
 ### 3.2.1 Running yiic Commands
 
@@ -193,16 +200,18 @@ container:
 docker-compose exec web ./yiic migrate/create add_column_name
 ```
 
-> **Note:** You may have to change ownership for files that where created from
-> inside the container if you want to write to them on the host system:
+> **Note:** If a command creates new files on your host (e.g. a new migration)
+> you may have to change file permissions to make them writeable on your host
+> system:
 >
 >     chown -R mike migrations/*
 >
 
 ### 3.2.2 Adding or Updating Composer Packages
 
-Whenever you add new composer packages this requires a rebuild of the base
-image. The procedure for this is the same as described in 2.2 and 2.3.
+The procedure for adding or updating composer packages is the same as described
+in 2.2 above. Remember that you have to rebuild the base image afterwards. It
+should probably also receive an updated version tag.
 
 ### 3.2.3 Working with Complex Local Configuration
 
