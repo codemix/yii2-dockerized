@@ -11,7 +11,7 @@ services:
     #
     base:
         # Specify a tag name for your base image here:
-        image: myregistry.example.com/me/myapp:base-1.0
+        image: myregistry.example.com/myproject/myapp:base-1.0
         build: ./
 
     # Composer utilty to manage composer packages

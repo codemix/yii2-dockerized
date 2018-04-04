@@ -4,10 +4,14 @@ Yii 2 Dockerized
 A template for docker based Yii 2 applications.
 
  * Ephemeral container, configured via environment variables
- * Application specific base image
+ * Application specific base image (Nginx + PHP-FPM)
  * Optional local configuration overrides for development/debugging (git-ignored)
  * Base scaffold code for login, signup and forgot-password actions
  * Flat configuration file structure
+
+> **Note:** The included example base image is now based on Alpine Linux and
+> uses [s6-overlay](https://github.com/just-containers/s6-overlay) to supervise
+> Nginx + PHP-FPM. You can of course change this to any setup you prefer.
 
 # 1 Main Concepts
 
@@ -17,7 +21,7 @@ The core idea of this template is that you build a bespoke **base image**
 for your application that meets your project's exact requirements. This image
 contains:
 
- * PHP runtime environment (e.g. Apache + PHP module)
+ * PHP runtime environment (e.g. Nginx + PHP-FPM)
  * PHP extensions
  * Composer packages
 
@@ -52,7 +56,6 @@ more details also see our
 [yii2-configloader](https://github.com/codemix/yii2-configloader) that we use
 in this template.
 
-
 # 2 Initial Project Setup
 
 ## 2.1 Download Application Template
@@ -66,14 +69,11 @@ rm -rf myproject/.git
 
 You could also download the files as ZIP archive from GitHub.
 
-## 2.2 Update/Add Composer Packages
+## 2.2 Init Composer Packages
 
-We use a composer container that is based on the official
-[composer](https://hub.docker.com/r/library/composer/) image.
-
-If your app needs some additional composer packages besides yii2 or
-if you want to update composer packages, go to the `./build` directory
-of the app:
+To manage composer packages We use a container that is based on the official
+[composer](https://hub.docker.com/r/library/composer/) image. First go to the
+`./build` directory of the app:
 
 ```sh
 cd myproject/build
@@ -94,7 +94,14 @@ docker-compose run --rm composer update
 This will update `composer.json` and `composer.lock` respectively. You can
 also run other composer commands, of course.
 
-**You have to rebuild your base image afterwards** (see below).
+If you don't need any extra packages you still need to create an initial
+`composer.lock`:
+
+```sh
+docker-compose run --rm composer install
+```
+
+**You now have to rebuild your base image!** (see below).
 
 
 > **Note:** As docker's composer image may not meet the PHP requirements of all

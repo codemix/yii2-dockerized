@@ -2,11 +2,10 @@
 #
 # This image mainly adds the latest application source to the base image
 #
-FROM myregistry.example.com/me/myapp:base-1.0
+FROM myregistry.example.com/myproject/myapp:base-1.0
 
-# Copy apache and PHP configuration for production into the image
-COPY ./config/apache/productive.conf /etc/apache2/apache2.conf
-COPY ./config/php/productive.ini /usr/local/etc/php/conf.d/productive.ini
+# Copy PHP configuration into the image
+COPY ./config/php/productive.ini /etc/php7/conf.d/90-productive.ini
 
 # Copy the app code into the image
 COPY . /var/www/html
