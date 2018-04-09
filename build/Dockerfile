@@ -27,6 +27,7 @@ RUN wget -O /tmp/s6-overlay-amd64.tar.gz \
 RUN apk add --no-cache \
     # Required packages
     nginx \
+    php7 \
     php7-ctype \
     php7-dom \
     php7-fileinfo \
