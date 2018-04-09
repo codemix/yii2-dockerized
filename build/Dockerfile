@@ -34,6 +34,7 @@ RUN apk add --no-cache \
     php7-fpm \
     php7-intl \
     php7-mbstring \
+    php7-posix \
     php7-session \
 
     # Optional extensions (modify as needed)
