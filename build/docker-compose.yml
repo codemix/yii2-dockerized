@@ -14,7 +14,7 @@ services:
         image: myregistry.example.com/me/myapp:base-1.0
         build: ./
 
-    # Composer utilty to manage composer packages
+    # Composer utility to manage composer packages
     #
     # You will usually only ever run one of these commands:
     #
