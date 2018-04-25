@@ -11,7 +11,7 @@
 FROM composer AS vendor
 COPY composer.json /app
 COPY composer.lock /app
-RUN ["composer", "install"]
+RUN ["composer", "install", "--ignore-platform-reqs"]
 
 
 # Build stage 2: Final image

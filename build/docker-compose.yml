@@ -21,6 +21,7 @@ services:
     #  docker-compose run --rm composer require [...]
     #  docker-compose run --rm composer update [...]
     #
+    # You may have to add --ignore-platform-reqs.
     # When changing packages you must rebuild the base container.
     #
     composer:
