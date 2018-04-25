@@ -33,13 +33,14 @@ RUN apk add --no-cache \
     php7-fileinfo \
     php7-fpm \
     php7-intl \
+    php7-json \
     php7-mbstring \
     php7-posix \
     php7-session \
+    php7-tokenizer \
 
     # Optional extensions (modify as needed)
     php7-apcu \
-    php7-json \
     php7-opcache \
     php7-pdo_mysql \
 
