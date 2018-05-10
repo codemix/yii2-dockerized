@@ -44,11 +44,8 @@ RUN apk add --no-cache \
     php7-opcache \
     php7-pdo_mysql \
 
-    # Ensure user/group www-data
+    # Ensure user/group www-data for php-fpm
     && adduser -u 82 -D -S -G www-data www-data \
-
-    # Let nginx run as www-data
-    && sed -i 's/user nginx/user www-data/' /etc/nginx/nginx.conf \
 
     # Create pid dir and send logs to stdout/stderr for Nginx
     && mkdir /run/nginx \
