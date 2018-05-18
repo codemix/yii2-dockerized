@@ -19,8 +19,7 @@ services:
             - db
         environment:
             ENABLE_ENV_FILE: 1
-            # Recommended: memory available for PHP / memory per process (RSS)
-            # Default is 5
+            # Default is 5:
             #PHP_FPM_MAX_CHILDREN: 50
         ports:
             - "8080:80"

@@ -11,7 +11,7 @@
 FROM composer AS vendor
 COPY composer.json /app
 COPY composer.lock /app
-RUN ["composer", "install", "--ignore-platform-reqs"]
+RUN ["composer", "install", "--ignore-platform-reqs", "--prefer-dist"]
 
 
 # Build stage 2: Final image
@@ -47,10 +47,11 @@ RUN apk add --no-cache \
     # Ensure user/group www-data for php-fpm
     && adduser -u 82 -D -S -G www-data www-data \
 
-    # Create pid dir and send logs to stdout/stderr for Nginx
+    # Create pid dir and send logs to stderr for Nginx
     && mkdir /run/nginx \
-    && ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log \
+    # Drop access logs as they only duplicate the host logs
+    && ln -sf /dev/null /var/log/nginx/access.log \
 
     # Create Fifo for logging as php-fpm doesn't like writing to stdout/stderr
     && mkfifo /tmp/yii-stdout && chmod 666 /tmp/yii-stdout
