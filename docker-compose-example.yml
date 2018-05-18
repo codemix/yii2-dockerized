@@ -17,8 +17,7 @@ services:
             #- ./vendor:/var/www/vendor
         links:
             - db
-        environment:
-            ENABLE_ENV_FILE: 1
+        #environment:
             # Default is 5:
             #PHP_FPM_MAX_CHILDREN: 50
         ports:
