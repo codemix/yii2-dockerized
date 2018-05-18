@@ -1,8 +1,10 @@
 config/local.php
 config/console-local.php
+config/php/local.ini
 /docker-compose.yml
 /vendor/
-.env
 
+.env
+*.bak
 *.swp
 .vimrc
