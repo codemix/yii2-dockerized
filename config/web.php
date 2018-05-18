@@ -3,8 +3,8 @@
 $config = [
     'id' => 'basic',
     'aliases' => [
-        '@bower' => '@vendor/bower-asset',
-        '@npm' => '@vendor/npm-asset',
+        '@bower' => '/var/www/vendor/bower-asset',
+        '@npm' => '/var/www/vendor/npm-asset',
     ],
     'basePath' => '/var/www/html',
     'bootstrap' => ['log'],
@@ -48,14 +48,7 @@ $config = [
             'targets' => [
                 [
                     'class' => 'codemix\streamlog\Target',
-                    'url' => 'php://stdout',
-                    'levels' => ['info','trace'],
-                    'logVars' => [],
-                ],
-                [
-                    'class' => 'codemix\streamlog\Target',
-                    'url' => 'php://stderr',
-                    'levels' => ['error', 'warning'],
+                    'url' => 'file:///tmp/yii-stdout',
                     'logVars' => [],
                 ],
             ],
@@ -89,8 +82,7 @@ $config = [
 ];
 
 if (YII_ENV_DEV) {
-    // Debug must be loaded first to let it grab early log messages
-    array_unshift($config['bootstrap'], 'debug');
+    $config['bootstrap'][] = 'debug';
     $config['modules']['debug'] = [
         'class' => 'yii\debug\Module',
         'allowedIPs' => ['*'],

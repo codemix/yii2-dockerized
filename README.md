@@ -4,10 +4,16 @@ Yii 2 Dockerized
 A template for docker based Yii 2 applications.
 
  * Ephemeral container, configured via environment variables
- * Application specific base image
+ * Application specific base image (Nginx + PHP-FPM)
  * Optional local configuration overrides for development/debugging (git-ignored)
  * Base scaffold code for login, signup and forgot-password actions
  * Flat configuration file structure
+
+> **Note:** The included example base image is now based on Alpine Linux and
+> uses [s6-overlay](https://github.com/just-containers/s6-overlay) to supervise
+> Nginx + PHP-FPM. You can of course change this to any setup you prefer.
+> You find the "old" setup based on Apache and mod_php in the "apache" branch.
+> Note though, that it's no longer maintained.
 
 # 1 Main Concepts
 
@@ -17,7 +23,7 @@ The core idea of this template is that you build a bespoke **base image**
 for your application that meets your project's exact requirements. This image
 contains:
 
- * PHP runtime environment (e.g. Apache + PHP module)
+ * PHP runtime environment (e.g. Nginx + PHP-FPM)
  * PHP extensions
  * Composer packages
 
@@ -32,7 +38,8 @@ Its configuration can be found in the `./build` directory:
  * `composer.json` and `composer.lock` list composer packages
 
 The actual **app image** extends from this base image and uses `./Dockerfile`
-in the main directory. It basically only adds your app sources on top.
+in the main directory. It basically only adds your app sources and productive
+PHP config on top.
 
 In the recommended scenario you would build the base image once then upload
 it to your container registry and share it with your co-developers.
@@ -52,6 +59,9 @@ more details also see our
 [yii2-configloader](https://github.com/codemix/yii2-configloader) that we use
 in this template.
 
+> **Note:** There's also one important main setting for php-fpm that affects
+> how many children should be started. This depends on the RAM you have
+> available. See `PHP_FPM_MAX_CHILDREN` in `docker-compose-example.yml`.
 
 # 2 Initial Project Setup
 
@@ -66,14 +76,11 @@ rm -rf myproject/.git
 
 You could also download the files as ZIP archive from GitHub.
 
-## 2.2 Update/Add Composer Packages
+## 2.2 Init Composer Packages
 
-We use a composer container that is based on the official
-[composer](https://hub.docker.com/r/library/composer/) image.
-
-If your app needs some additional composer packages besides yii2 or
-if you want to update composer packages, go to the `./build` directory
-of the app:
+To manage composer packages We use a container that is based on the official
+[composer](https://hub.docker.com/r/library/composer/) image. First go to the
+`./build` directory of the app:
 
 ```sh
 cd myproject/build
@@ -94,7 +101,14 @@ docker-compose run --rm composer update
 This will update `composer.json` and `composer.lock` respectively. You can
 also run other composer commands, of course.
 
-**You have to rebuild your base image afterwards** (see below).
+If you don't need any extra packages you still need to create an initial
+`composer.lock`:
+
+```sh
+docker-compose run --rm composer install
+```
+
+**You now have to rebuild your base image!** (see below).
 
 
 > **Note:** As docker's composer image may not meet the PHP requirements of all
