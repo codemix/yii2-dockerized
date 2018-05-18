@@ -12,6 +12,8 @@ A template for docker based Yii 2 applications.
 > **Note:** The included example base image is now based on Alpine Linux and
 > uses [s6-overlay](https://github.com/just-containers/s6-overlay) to supervise
 > Nginx + PHP-FPM. You can of course change this to any setup you prefer.
+> You find the "old" setup based on Apache and mod_php in the "apache" branch.
+> Note though, that it's no longer maintained.
 
 # 1 Main Concepts
 
@@ -36,7 +38,8 @@ Its configuration can be found in the `./build` directory:
  * `composer.json` and `composer.lock` list composer packages
 
 The actual **app image** extends from this base image and uses `./Dockerfile`
-in the main directory. It basically only adds your app sources on top.
+in the main directory. It basically only adds your app sources and productive
+PHP config on top.
 
 In the recommended scenario you would build the base image once then upload
 it to your container registry and share it with your co-developers.
@@ -55,6 +58,10 @@ You should continue to follow this principle when developing your app. For
 more details also see our
 [yii2-configloader](https://github.com/codemix/yii2-configloader) that we use
 in this template.
+
+> **Note:** There's also one important main setting for php-fpm that affects
+> how many children should be started. This depends on the RAM you have
+> available. See `PHP_FPM_MAX_CHILDREN` in `docker-compose-example.yml`.
 
 # 2 Initial Project Setup
 
