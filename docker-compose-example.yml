@@ -17,9 +17,9 @@ services:
             #- ./vendor:/var/www/vendor
         links:
             - db
-        #environment:
-            # Default is 5:
-            #PHP_FPM_MAX_CHILDREN: 50
+        environment:
+            # Make sure to tweak this in production
+            PHP_FPM_MAX_CHILDREN: 5
         ports:
             - "8080:80"
 
