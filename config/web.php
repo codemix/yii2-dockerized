@@ -11,6 +11,12 @@ $config = [
     'vendorPath' => '/var/www/vendor',
     'catchAll' => self::env('MAINTENANCE', false) ? ['site/maintenance'] : null,
     'components' => [
+        'cache' => self::env('DISABLE_CACHE', false) ?
+            'yii\caching\DummyCache' :
+            [
+                'class' => 'yii\caching\ApcCache',
+                'useApcu' => true,
+            ],
         'db' => [
             'class' => 'yii\db\Connection',
             'dsn' => self::env('DB_DSN', 'mysql:host=db;dbname=web'),
@@ -19,18 +25,18 @@ $config = [
             'charset' => 'utf8',
             'tablePrefix' => '',
         ],
-        'cache' => [
-            'class' => 'yii\caching\ApcCache',
-            'useApcu' => true,
-        ],
-        'cache' => self::env('DISABLE_CACHE', false) ?
-            'yii\caching\DummyCache' :
-            [
-                'class' => 'yii\caching\ApcCache',
-                'useApcu' => true,
-            ],
         'errorHandler' => [
             'errorAction' => 'site/error',
+        ],
+        'log' => [
+            'traceLevel' => self::env('YII_TRACELEVEL', 0),
+            'targets' => [
+                [
+                    'class' => 'codemix\streamlog\Target',
+                    'url' => 'file:///tmp/yii-stdout',
+                    'logVars' => [],
+                ],
+            ],
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
@@ -41,16 +47,6 @@ $config = [
                 'password' => self::env('SMTP_PASSWORD'),
                 'port' => self::env('SMTP_PORT', 25),
                 'encryption' => self::env('SMTP_ENCRYPTION', null),
-            ],
-        ],
-        'log' => [
-            'traceLevel' => self::env('YII_TRACELEVEL', 0),
-            'targets' => [
-                [
-                    'class' => 'codemix\streamlog\Target',
-                    'url' => 'file:///tmp/yii-stdout',
-                    'logVars' => [],
-                ],
             ],
         ],
         'request' => [
