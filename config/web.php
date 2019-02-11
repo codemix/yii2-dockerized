@@ -1,13 +1,31 @@
 <?php
 /* @var codemix\yii2confload\Config $this */
-$config = [
+
+// Prepare bootsrapped components and modules
+$bootstrap = ['log'];   // Must be 1st bootstrapped component
+$modules = [];
+if (YII_ENV_DEV) {
+    $bootstrap[] = 'debug';  // Must be 2nd bootstrapped component
+    $bootstrap[] = 'gii';
+    $modules['debug'] = [
+        'class' => 'yii\debug\Module',
+        'allowedIPs' => ['*'],
+    ];
+    $modules['gii'] = [
+        'class' => 'yii\gii\Module',
+        'allowedIPs' => ['*'],
+    ];
+}
+
+return [
     'id' => 'basic',
     'aliases' => [
         '@bower' => '/var/www/vendor/bower-asset',
         '@npm' => '/var/www/vendor/npm-asset',
     ],
     'basePath' => '/var/www/html',
-    'bootstrap' => ['log'],
+    'bootstrap' => $bootsrap,
+    'modules' => $modules,
     'vendorPath' => '/var/www/vendor',
     'catchAll' => self::env('MAINTENANCE', false) ? ['site/maintenance'] : null,
     'components' => [
@@ -76,19 +94,3 @@ $config = [
         'user.emailConfirmationTokenExpire' => 43200, // 5 days
     ],
 ];
-
-if (YII_ENV_DEV) {
-    $config['bootstrap'][] = 'debug';
-    $config['modules']['debug'] = [
-        'class' => 'yii\debug\Module',
-        'allowedIPs' => ['*'],
-    ];
-
-    $config['bootstrap'][] = 'gii';
-    $config['modules']['gii'] = [
-        'class' => 'yii\gii\Module',
-        'allowedIPs' => ['*'],
-    ];
-}
-
-return $config;
