@@ -1,7 +1,7 @@
 <?php
 /* @var codemix\yii2confload\Config $this */
 
-// Prepare bootsrapped components and modules
+// Prepare bootstrapped components and modules
 $bootstrap = ['log'];   // Must be 1st bootstrapped component
 $modules = [];
 if (YII_ENV_DEV) {
@@ -24,7 +24,7 @@ return [
         '@npm' => '/var/www/vendor/npm-asset',
     ],
     'basePath' => '/var/www/html',
-    'bootstrap' => $bootsrap,
+    'bootstrap' => $bootstrap,
     'modules' => $modules,
     'vendorPath' => '/var/www/vendor',
     'catchAll' => self::env('MAINTENANCE', false) ? ['site/maintenance'] : null,
