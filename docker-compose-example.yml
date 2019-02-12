@@ -24,7 +24,7 @@ services:
             - "8080:80"
 
     db:
-        image: mysql
+        image: mysql:5
         environment:
             MYSQL_ROOT_PASSWORD: root
             MYSQL_DATABASE: web
