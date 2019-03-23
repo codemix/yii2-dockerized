@@ -51,7 +51,7 @@ return [
             'targets' => [
                 [
                     'class' => 'codemix\streamlog\Target',
-                    'url' => 'file:///tmp/yii-stdout',
+                    'url' => 'php://stdout',
                     'logVars' => [],
                 ],
             ],
