@@ -50,6 +50,8 @@ RUN wget -O /etc/apk/keys/php-alpine.rsa.pub \
         php7-apcu@php \
         php7-opcache@php \
         php7-pdo_mysql@php \
+    # Fix missing php binary
+    && ln -s /usr/bin/php7 /usr/bin/php \
     #
     # Ensure user/group www-data for php-fpm
     && adduser -u 82 -D -S -G www-data www-data \

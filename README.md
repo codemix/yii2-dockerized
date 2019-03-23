@@ -173,17 +173,18 @@ docker-compose up -d
 docker-compose exec web ./yii migrate
 ```
 
+Finally you need to set write permissions for some directories. It's sufficient
+if the `www-data` group in the container has write permissions. This way your
+local user can still own these directories:
+
+```sh
+docker-compose exec web chgrp www-data web/assets runtime var/sessions
+docker-compose exec web chmod g+rwx web/assets runtime var/sessions
+```
+
 When done, you can access the new app from
 [http://localhost:8080](http://localhost:8080).
 
-> **Note:** If you see an error about write permissions to `web/assets/`,
-> `runtime/` or `var/sessions` it's because the local file owner id is
-> different from `1000` which is the `www-data` user inside the container.
->
-> To fix this, run:
->
->     docker-compose exec web chown www-data web/assets runtime var/sessions
->
 
 ## 3.2 Development Session
 
