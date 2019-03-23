@@ -12,19 +12,15 @@ return [
     'components' => [
         'db' => $web['components']['db'],
         'log' => [
+            'traceLevel' => self::env('YII_TRACELEVEL', 0),
+            'flushInterval' => 1,   // log messages immediately
             'targets' => [
                 [
                     'class' => 'codemix\streamlog\Target',
                     'url' => 'php://stdout',
-                    'levels' => ['info','trace'],
-                    'categories' => ['app\\*'],
                     'logVars' => [],
-                ],
-                [
-                    'class' => 'codemix\streamlog\Target',
-                    'url' => 'php://stderr',
-                    'levels' => ['error', 'warning'],
-                    'logVars' => [],
+                    'exportInterval' => 1,
+                    'except' => self::env('CONSOLE_LOG_YII', 0) ? [] : ['yii\*'],
                 ],
             ],
         ],

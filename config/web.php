@@ -53,6 +53,7 @@ return [
                     'class' => 'codemix\streamlog\Target',
                     'url' => 'php://stdout',
                     'logVars' => [],
+                    'except' => self::env('WEB_LOG_YII', 0) ? [] : ['yii\*'],
                 ],
             ],
         ],
