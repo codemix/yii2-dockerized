@@ -1,0 +1,14 @@
+#!/usr/bin/with-contenv sh
+
+if [ "$ENABLE_CROND" ] && [ "$ENABLE_CROND" -eq "1" ]
+then
+    echo "  Enabling crond and copying crontabs"
+    rm -f /etc/services.d/crond/down
+    rm -f /etc/crontabs/root
+    cp /var/www/html/config/crontabs/* /etc/crontabs
+    chown root:root /etc/crontabs/*
+    chmod go-rwx /etc/crontabs/*
+else
+    echo "  Disabling crond"
+    touch /etc/services.d/crond/down
+fi

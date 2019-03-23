@@ -60,7 +60,13 @@ RUN wget -O /etc/apk/keys/php-alpine.rsa.pub \
     && mkdir /run/nginx \
     && ln -sf /dev/stderr /var/log/nginx/error.log \
     # Drop access logs as they only duplicate the host logs
-    && ln -sf /dev/null /var/log/nginx/access.log
+    && ln -sf /dev/null /var/log/nginx/access.log \
+    #
+    # Set system timezone to make cron jobs run at correct local times
+    && apk add --no-cache tzdata \
+    && cp /usr/share/zoneinfo/Europe/Berlin /etc/localtime \
+    && echo "Europe/Berlin" > /etc/timezone \
+    && apk del --force-broken-world tzdata
 
 # S6 configuration
 ADD ./etc/cont-init.d /etc/cont-init.d

@@ -1,0 +1,12 @@
+#
+# Crontab for user www-data
+#
+# Notes:
+#
+#  - Commands are executed relative to the user's home directory
+#  - If a command started by the same crontab line is still running
+#    it's not started again (extra feature of crond in busybox)
+#
+
+# min   hour    day     month   weekday command
+#*       *       *       *       *       ./yii some/command

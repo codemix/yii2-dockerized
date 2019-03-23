@@ -20,6 +20,8 @@ services:
         environment:
             # Make sure to tweak this in production
             PHP_FPM_MAX_CHILDREN: 5
+            # Enable periodic jobs (see config/crontabs)
+            #ENABLE_CROND: 1
         ports:
             - "8080:80"
 

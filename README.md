@@ -8,6 +8,7 @@ A template for docker based Yii 2 applications.
  * Optional local configuration overrides for development/debugging (git-ignored)
  * Base scaffold code for login, signup and forgot-password actions
  * Flat configuration file structure
+ * Optional cron integration for periodic jobs
 
 > **Note:** The included example base image is now based on Alpine Linux and
 > uses [s6-overlay](https://github.com/just-containers/s6-overlay) to supervise
@@ -123,6 +124,8 @@ Before you continue with building the base image you should:
  * Set a tag name for the base image in `./build/docker-compose.yml`
  * Use the same tag name in `./Dockerfile` in the main directory
  * Optionally add more PHP extensions or system packages in `./build/Dockerfile`
+ * Choose a timezone in `./build/Dockerfile`. This is only really relevant if
+   you want to enable crond, to let the jobs run at correct local times.
 
 To build the base image, again go to the `./build` directory and run:
 
@@ -252,3 +255,13 @@ docker-compose exec web cp -rf /var/www/vendor ./
 > **Note:** Inside the container composer packages live in `/var/www/vendor`
 > instead of the app's `./vendor` directory. This way we don't override the
 > vendor directory when we map the local app directory into the container.
+
+
+### 3.2.3 Configuring Cron Jobs
+
+To run periodic jobs the integrated crond (busybox implementation) can be
+activated by setting `ENABLE_CROND=1` in the `docker-compose.yml` file.
+
+Cron jobs are added in `config/crontabs/<username>`. There's an example file
+for `www-data` included. When changing a file there the container must be
+restarted to activate the crontab.
