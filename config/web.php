@@ -48,12 +48,23 @@ return [
         ],
         'log' => [
             'traceLevel' => self::env('YII_TRACELEVEL', 0),
+            'flushInterval' => 1,
             'targets' => [
                 [
                     'class' => 'codemix\streamlog\Target',
                     'url' => 'php://stdout',
                     'logVars' => [],
+                    'levels' => ['info', 'trace'],
                     'except' => self::env('WEB_LOG_YII', 0) ? [] : ['yii\*'],
+                    'exportInterval' => 1,
+                ],
+                [
+                    'class' => 'codemix\streamlog\Target',
+                    'url' => 'php://stderr',
+                    'logVars' => [],
+                    'levels' => ['error', 'warning'],
+                    'except' => self::env('WEB_LOG_YII', 0) ? [] : ['yii\*'],
+                    'exportInterval' => 1,
                 ],
             ],
         ],
