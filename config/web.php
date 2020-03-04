@@ -57,6 +57,8 @@ return [
                     'levels' => ['info', 'trace'],
                     'except' => self::env('WEB_LOG_YII', 0) ? [] : ['yii\*'],
                     'exportInterval' => 1,
+                    'disableTimestamp' => true,
+                    'prefixString' => '[yii-web]',
                 ],
                 [
                     'class' => 'codemix\streamlog\Target',
@@ -65,6 +67,8 @@ return [
                     'levels' => ['error', 'warning'],
                     'except' => self::env('WEB_LOG_YII', 0) ? [] : ['yii\*'],
                     'exportInterval' => 1,
+                    'disableTimestamp' => true,
+                    'prefixString' => '[yii-web]',
                 ],
             ],
         ],

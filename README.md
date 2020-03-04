@@ -102,12 +102,6 @@ docker-compose run --rm composer update
 This will update `composer.json` and `composer.lock` respectively. You can
 also run other composer commands, of course.
 
-If you don't need any extra packages you still need to create an initial
-`composer.lock`:
-
-```sh
-docker-compose run --rm composer install
-```
 
 **You now have to rebuild your base image!** (see below).
 
@@ -127,7 +121,14 @@ Before you continue with building the base image you should:
  * Choose a timezone in `./build/Dockerfile`. This is only really relevant if
    you want to enable crond, to let the jobs run at correct local times.
 
-To build the base image, again go to the `./build` directory and run:
+To start you first need to create an initial `composer.lock`. So go to the
+`./build` directory and run:
+
+```sh
+docker-compose run --rm composer install
+```
+
+Then you can build the base image:
 
 ```sh
 docker-compose build

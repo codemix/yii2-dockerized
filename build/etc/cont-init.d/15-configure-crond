@@ -2,13 +2,13 @@
 
 if [ "$ENABLE_CROND" ] && [ "$ENABLE_CROND" -eq "1" ]
 then
-    echo "  Enabling crond and copying crontabs"
+    echo "[15-configure-crond] Enabling crond and copying crontabs"
     rm -f /etc/services.d/crond/down
     rm -f /etc/crontabs/root
     cp /var/www/html/config/crontabs/* /etc/crontabs
     chown root:root /etc/crontabs/*
     chmod go-rwx /etc/crontabs/*
 else
-    echo "  Disabling crond"
+    echo "[15-configure-crond] Disabling crond"
     touch /etc/services.d/crond/down
 fi

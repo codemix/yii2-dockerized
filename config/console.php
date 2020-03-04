@@ -15,24 +15,27 @@ return [
             'traceLevel' => self::env('YII_TRACELEVEL', 0),
             'flushInterval' => 1,   // log messages immediately
             'targets' => [
-                // Route log output to stderr/stdout of 1st process (=docker logs)
-                // - popen() opens file descriptor to 'cat > <file>' command
-                // - /proc/1/fd/{1,2} are the file descriptors of 1st process stdout/err
                 [
                     'class' => 'codemix\streamlog\Target',
-                    'fp' => popen('cat > /proc/1/fd/1', 'w'),
+                    'url' => 'file:///docker-stdout',
                     'logVars' => [],
                     'levels' => ['info', 'trace'],
                     'except' => self::env('CONSOLE_LOG_YII', 0) ? [] : ['yii\*'],
                     'exportInterval' => 1,
+                    'enableLocking' => true,
+                    'disableTimestamp' => true,
+                    'prefixString' => '[yii-console]',
                 ],
                 [
                     'class' => 'codemix\streamlog\Target',
-                    'fp' => popen('cat > /proc/1/fd/2', 'w'),
+                    'url' => 'file:///docker-stderr',
                     'logVars' => [],
                     'levels' => ['error', 'warning'],
                     'except' => self::env('CONSOLE_LOG_YII', 0) ? [] : ['yii\*'],
                     'exportInterval' => 1,
+                    'enableLocking' => true,
+                    'disableTimestamp' => true,
+                    'prefixString' => '[yii-console]',
                 ],
             ],
         ],

@@ -1,0 +1,3 @@
+#!/bin/sh
+
+exec tail -f /docker-stderr >&2

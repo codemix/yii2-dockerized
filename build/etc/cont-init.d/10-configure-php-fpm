@@ -11,11 +11,11 @@ if [ "$PHP_FPM_MAX_CHILDREN" ]; then
         MAX_SPARE=$(( 60 * PHP_FPM_MAX_CHILDREN / 100 ))
         START=$(( MIN_SPARE + ( (MAX_SPARE - MIN_SPARE) / 2) ))
     fi
-    echo "  Configuring php-fpm dynamic workers:"
-    echo "    pm.max_children = $PHP_FPM_MAX_CHILDREN"
-    echo "    pm.start_servers = $START"
-    echo "    pm.min_spare_servers = $MIN_SPARE"
-    echo "    pm.max_spare_servers = $MAX_SPARE"
+    echo "[10-configure-php-fpm]" \
+         "max_children:$PHP_FPM_MAX_CHILDREN" \
+         "start_servers:$START" \
+         "min_spare_servers:$MIN_SPARE" \
+         "max_spare_servers:$MAX_SPARE"
     sed -i "s/pm.max_children = .*/pm.max_children = $PHP_FPM_MAX_CHILDREN/" /etc/php7/php-fpm.d/www.conf
     sed -i "s/pm.start_servers = .*/pm.start_servers = $START/" /etc/php7/php-fpm.d/www.conf
     sed -i "s/pm.min_spare_servers = .*/pm.min_spare_servers = $MIN_SPARE/" /etc/php7/php-fpm.d/www.conf
